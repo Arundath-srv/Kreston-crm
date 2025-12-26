@@ -44,7 +44,7 @@ const AddUser = ({ data, setRefresh, setData }) => {
     if (data) {
       let uType = data.type;
       let uCompany = data?.company?.value;
-      let uBranch = data?.uBranch?.value;
+      let uBranch = data?.uBranch?.value;      
 
       if (data.image) {
         setImage(`${API_URL}${data.image}`);
@@ -157,6 +157,9 @@ const AddUser = ({ data, setRefresh, setData }) => {
   let type = watch("type") || null;
   let branch = watch("branch") || null;
 
+  // let privilege = watch("privilege") || null;
+  
+
   const handleOnChange = ({ name, value, obj }) => {
     if (name === "signature") {
       setIsSignature(obj?.img ?? null);
@@ -168,7 +171,7 @@ const AddUser = ({ data, setRefresh, setData }) => {
 
     if (name === "company") {
       setValue("branch", null);
-      setValue("franchise", null);
+      setValue("franchise", null);    
       setValue("subBranch", null);
       setValue("collectionCenter", null);
 
@@ -176,6 +179,9 @@ const AddUser = ({ data, setRefresh, setData }) => {
         company: value,
       });
     }
+
+    console.log(name);
+    
 
     if (name === "type") {
       setValue("franchise", null);
@@ -206,6 +212,10 @@ const AddUser = ({ data, setRefresh, setData }) => {
         );
       }
     }
+
+    // if(name === "privilege"){
+
+    // }
 
     if (name === "branch") {
       setValue("franchise", null);
@@ -348,6 +358,20 @@ const AddUser = ({ data, setRefresh, setData }) => {
         options: selectOptions?.privilege ?? [],
       },
       {
+        label: "Partner",
+        name: "partner",
+        type: "select",
+        required: false,
+        options: selectOptions?.company ?? [],
+      },
+      {
+        label: "Manager",
+        name: "manager",
+        type: "select",
+        required: false,
+        options: selectOptions?.company ?? [],
+      },
+      {
         label: "Module",
         name: "module",
         type: "select",
@@ -370,10 +394,10 @@ const AddUser = ({ data, setRefresh, setData }) => {
       },
       {
         label: "Type",
-        name: "type",
+        name: "type",   
         type: "select",
         disabled: !company,
-        required: true,
+        required: false,
         options: [
           { label: "Main branch", value: 1 },
           { label: "Sub branch", value: 2 },

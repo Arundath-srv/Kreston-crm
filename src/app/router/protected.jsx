@@ -22,6 +22,19 @@ const protectedRoutes = {
           element: <Navigate to="/master-setting/user" />,
         },
 
+        {
+          path: '/lead',
+          children: [
+            {
+              path: 'add-lead',
+              lazy: async () => ({
+                Component: (await import("app/pages/Lead/Addlead"))
+                  .default,
+              }),
+            }
+          ]
+        },
+
         //? ===========> Master Settings Module Routes <============
         {
           path: "/master-setting",

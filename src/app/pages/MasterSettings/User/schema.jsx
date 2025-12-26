@@ -33,15 +33,15 @@ export const userSchema = yup
     privilege: yup.string().required("Privilege is required"),
     gender: yup.number().oneOf([1, 2, 3], "Gender must be 1, 2, or 3"),
     module: yup.string().required("Module is required"),
-    company: yup.string().required("Company is required"),
+    company: yup.string().nullable("Company is required"),
 
     type: yup
       .number()
       .oneOf([1, 2, 3, 4], "Type must be 1, 2, 3 or 4")
-      .required("Type is required"),
+      .nullable("Type is required"),
 
-    department: yup.string().required("Department is required"),
-    branch: yup.string().required("Branch is required"),
+    department: yup.string().nullable("Department is required"),
+    branch: yup.string().nullable("Branch is required"),
     subBranch: yup.string().nullable(),
     franchise: yup.string().nullable(),
     collectionCenter: yup.string().nullable(),
@@ -71,8 +71,8 @@ export const userSchema = yup
     function (values) {
       const { collectionCenter, subBranch, franchise, type } = values;
 
-      if (!type)
-        return this.createError({ path: "type", message: "Type is required" });
+      // if (!type)
+      //   return this.createError({ path: "type", message: "Type is required" });
 
       if (type === 2 && !subBranch) {
         return this.createError({
@@ -100,7 +100,7 @@ export const userSchema = yup
   );
 
 export const singleChangeSchema = yup.object().shape({
-  type: yup.number().oneOf([1, 2], "Invalid type").required("Type is required"),
+  type: yup.number().oneOf([1, 2], "Invalid type").nullable("Type is required"),
 
   privilege: yup.string().when("type", {
     is: (type) => type === 1,
