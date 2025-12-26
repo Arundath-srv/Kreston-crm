@@ -11,6 +11,8 @@ const COLLECTIONS = {
   PRIVILEGES: "privileges",
   USER_ACTIVITY_LOGS: "user_activity_logs",
 
+  LEADS: "leads",
+
   //-> Menus and Modules
   MODULES: "modules",
   MAIN_MENUS: "mainMenus",

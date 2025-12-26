@@ -27,7 +27,7 @@ const schema = new Schema(
     type: {
       type: Number,
       enum: [1, 2, 3, 4, 5],
-      required: true,
+      required: false,
       description: "1 - Main Branch , 2 - Sub Branch , 3 - Franchise collection center , 4 - Owned collection center",
     },
 

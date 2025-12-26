@@ -10,6 +10,7 @@ import MainMenu from "./mainMenu.js";
 import SubMenu from "./subMenu.js";
 import Company from "./company.js";
 import Branch from "./branch.js";
+// import Lead from "./lead.js";
 
 //? Common Models
 import Counter from "./counter.js";
@@ -30,6 +31,7 @@ export default {
   SubMenu,
   Company,
   Branch,
+  // Lead,
 
   //? Common
   Counter,

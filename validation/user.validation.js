@@ -7,15 +7,15 @@ export const userSchema = async (body, required = true) => {
     .object({
       company: yup
         .array()
-        .of(yup.string().required("Company name cannot be empty"))
+        .of(yup.string().nullable("Company name cannot be empty"))
         .min(1, "At least one company is required")
-        .required("Company is required"),
+        .nullable("Company is required"),
 
       branch: yup
         .array()
-        .of(yup.string().required("Branch name cannot be empty"))
+        .of(yup.string().nullable("Branch name cannot be empty"))
         .min(1, "At least one branch is required")
-        .required("Branch is required"),
+        .nullable("Branch is required"),
 
       firstName: dynamicRequire(
         yup

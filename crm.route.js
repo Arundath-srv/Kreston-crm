@@ -17,7 +17,9 @@ import userRouter from "@/routes/user.router.js";
 import optionsRouter from "@/routes/options.router.js";
 
 //? common routes
-router.use("/options", crmAuth({ common: true }), optionsRouter);
+router.use("/options", optionsRouter);
+
+// , crmAuth({ common: true })
 
 //? finance routers
 
