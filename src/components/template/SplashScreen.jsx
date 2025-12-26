@@ -1,5 +1,5 @@
 // Local Imports
-import Logo from "assets/noble.svg?react";
+import Logo from "assets/kreston-logo.svg?react";
 import { Progress } from "components/ui";
 
 // ----------------------------------------------------------------------

@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import clsx from "clsx";
 
 // Local Imports
-import Logo from "assets/noble-sm.svg?react";
+import Logo from "assets/kreston-logo-sm.svg?react";
 import { Menu } from "./Menu";
 // import { Item } from "./Menu/Item";
 import { Profile } from "../../Profile";
