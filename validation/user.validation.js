@@ -46,8 +46,8 @@ export const userSchema = async (body, required = true) => {
           .matches(/[A-Z]/, "password must contain at least one uppercase letter")
           .matches(/\d/, "password must contain at least one number")
           .matches(/[!@#$%^&*(),.?":{}|<>]/, "password must contain at least one special character"),
-        required,
-        "password is required"
+        // required,
+        // "password is required"
       ),
       // dob: yup.string().matches(/^\d{4}-\d{2}-\d{2}$/, "dob must be in YYYY-MM-DD format"),
       privilege: dynamicRequire(yup.string().matches(objectIdRegex, "invalid privilege id format"), required, "privilege is required"),

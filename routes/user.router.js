@@ -31,7 +31,7 @@ router.put("/mfa/setup", auth({ common: true }), controller.setupMFA);
 
 //? Master Routes
 router.post("/", auth({ master: true }), controller.addUser);
-router.get("/list", auth({ master: true }), controller.listUser);
+router.get("/list", controller.listUser);
 router.put("/status", auth({ master: true }), controller.userActiveInactive);
 router.put("/password", auth({ master: true }), controller.changePassword);
 router.put("/privilege", auth({ master: true }), controller.updatePrivilege);

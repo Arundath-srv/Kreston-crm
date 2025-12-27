@@ -69,7 +69,13 @@ export const basicData = asyncErrorHandler(async (req) => {
 export const deleteUser = asyncErrorHandler(async (req) => {
   let userId = req.user?._id;
 
+  console.log(userId, "delete test");
+  
+
   let { other } = req.query;
+
+  console.log(other);
+  
 
   if (!isNull(other) && !checkObjectIdValid(other)) {
     throw new Error("Invalid user provided", 400);
@@ -88,7 +94,10 @@ export const deleteUser = asyncErrorHandler(async (req) => {
 
   let updaterId = req.isAdmin ? other : userId;
 
-  let user = await models.User.findById(updaterId, { status: 1, updatedBy: userId });
+  console.log(req.isAdmin, updaterId, "test delete user");
+  
+
+  let user = await models.User.findByIdAndUpdate(updaterId, { status: 1, updatedBy: userId });
 
   await userActivity({
     req,
@@ -179,6 +188,9 @@ export const setupMFA = asyncErrorHandler(async (req) => {
 export const addUser = asyncErrorHandler(async (req) => {
   let payload = await userSchema(req.body);
 
+  console.log(req.body, "user add test");
+  
+
   let isValidModule = await models.Modules.findOne({
     _id: payload.module,
     status: 0,
@@ -224,6 +236,8 @@ export const addUser = asyncErrorHandler(async (req) => {
 
   payload.password = await encryptPassword(payload.password);
 
+  payload.addedBy = req.user._id;
+
   let user = await new models.User(payload).save();
 
   userActivity({
@@ -239,6 +253,8 @@ export const updateUser = asyncErrorHandler(async (req) => {
   let userId = req.user?._id;
 
   let payload = await userSchema(req.body);
+  console.log(payload, "edit test");
+  
 
   if (payload.imageReplace) {
     payload.image = "";
@@ -251,12 +267,12 @@ export const updateUser = asyncErrorHandler(async (req) => {
   }
 
   let isValidModule = await models.Modules.findOne({ _id: payload.module, status: 0 });
-  if (!isNull(module) && isNull(isValidModule)) {
+  if (!isNull(payload.module) && isNull(isValidModule)) {
     throw new Error("invalid module id provided", 400);
   }
 
   let isValidPrivilege = await models.Privilege.findOne({ _id: payload.privilege });
-  if (!isNull(privilege) && isNull(isValidPrivilege)) {
+  if (!isNull(payload.privilege) && isNull(isValidPrivilege)) {
     throw new Error("Invalid privilege id provided", 400);
   }
 
@@ -345,6 +361,7 @@ export const listUser = asyncErrorHandler(async (req) => {
     .populate("privilege", OPTIONS_FIELD)
     .populate("company", OPTIONS_FIELD)
     .populate("branch", OPTIONS_FIELD)
+    .populate("addedBy", OPTIONS_FIELD)
     // .populate("collectionCenter", OPTIONS_FIELD)
     .sort(sortBy)
     .select("-password -createdAt -updatedAt -__v")

@@ -35,6 +35,9 @@ const schema = new Schema(
     branch: { type: Schema.Types.ObjectId, ref: COLLECTIONS.BRANCH },
     subBranch: { type: Schema.Types.ObjectId, ref: COLLECTIONS.BRANCH },
 
+    manager: {type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS},
+    partner: {type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS},
+
     status: { type: Number, default: 0, enum: [0, 1, 2], description: "0 - active, 1 - deleted, 2 - blocked or inactive" },
 
     browserTokens: [

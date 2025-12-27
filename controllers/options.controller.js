@@ -36,19 +36,22 @@ export const districts = asyncErrorHandler(async (req) => {
 
 //! Core Routes
 export const user = asyncErrorHandler(async (req) => {
-  let { type, branch, subBranch, franchise, collectionCenter, department } = req.query;
+  let { type, branch, subBranch, franchise, collectionCenter, department, privilege } = req.query;
   let condition = { status: 0 };
   if (type == "1") {
     condition = {};
   }
+  
 
   if (branch) condition.branch = branch;
   if (subBranch) condition.subBranch = subBranch;
   if (franchise) condition.franchise = franchise;
   if (collectionCenter) condition.collectionCenter = collectionCenter;
   if (department) condition.department = department;
+  if (privilege) condition.privilege = privilege;
 
   let data = await models.User.find(condition, OPTIONS_FIELD);
+  
   return new Response(null, { data }, 200);
 });
 
@@ -63,7 +66,7 @@ export const privilege = asyncErrorHandler(async (req) => {
     if (users.length > 0) condition._id = { $in: users };
   }
 
-  data = await models.Privilege.find(condition, OPTIONS_FIELD);
+  data = await models.Privilege.find(condition, OPTIONS_FIELD);  
 
   return new Response(null, { data }, 200);
 });
@@ -86,3 +89,17 @@ export const module = asyncErrorHandler(async (req) => {
 });
 
 //! Finance Route
+
+
+// partner
+
+export const partner = asyncErrorHandler(async (req) => {
+
+  const privilegeId = '694e357a9dc2560dfb65f6dc';
+
+  const condition = { status: 0, privilege: privilegeId };
+
+  let data = await models.User.find(condition).lean();
+
+  return new Response("partner", {data}, 200);
+});
