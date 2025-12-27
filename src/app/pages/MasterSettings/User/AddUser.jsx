@@ -20,10 +20,10 @@ const AddUser = ({ data, setRefresh, setData }) => {
 
   useEffect(() => {
     GET_OPTIONS(setSelectOptions, { privilege: true }, "privilege");
-    GET_OPTIONS(setSelectOptions, { signature: true }, "signature");
-    GET_OPTIONS(setSelectOptions, { company: true }, "company");
+    // GET_OPTIONS(setSelectOptions, { signature: true }, "signature");
+    // GET_OPTIONS(setSelectOptions, { company: true }, "company");
     GET_OPTIONS(setSelectOptions, { module: true }, "module");
-    GET_OPTIONS(setSelectOptions, { department: true }, "department");
+    // GET_OPTIONS(setSelectOptions, { department: true }, "department");
   }, []);
 
   const {
@@ -44,7 +44,8 @@ const AddUser = ({ data, setRefresh, setData }) => {
     if (data) {
       let uType = data.type;
       let uCompany = data?.company?.value;
-      let uBranch = data?.uBranch?.value;      
+      let uBranch = data?.uBranch?.value;   
+         
 
       if (data.image) {
         setImage(`${API_URL}${data.image}`);
@@ -87,6 +88,29 @@ const AddUser = ({ data, setRefresh, setData }) => {
             mainBranch: uBranch,
           },
         );
+      }
+
+      if(data.manager ){
+        const managerId = getPrivilegeId('manager');
+        const partnerId = getPrivilegeId('partner');        
+
+        GET_OPTIONS(setSelectOptions, {user: true}, "partner", {
+          privilege: partnerId
+        });
+
+        GET_OPTIONS(setSelectOptions, {user: true}, "manager", {
+          privilege: managerId
+        });
+
+      }
+
+      if(privilegeLabel === 'manager'){
+        const partnerId = getPrivilegeId('partner');
+
+        GET_OPTIONS(setSelectOptions, {user: true}, "partner", {
+          privilege: partnerId
+        });
+
       }
 
       let fields = [
@@ -157,13 +181,63 @@ const AddUser = ({ data, setRefresh, setData }) => {
   let type = watch("type") || null;
   let branch = watch("branch") || null;
 
-  // let privilege = watch("privilege") || null;
-  
+  let privilege = watch("privilege") || null;
+
+  const getPrivilegeId = (label) => {
+    return selectOptions?.privilege?.find(
+      (p) => p?.label.toLowerCase() === label.toLowerCase()
+    )?.value;
+  }
+
+  const privilegeLabel = useMemo(() => {
+    return selectOptions?.privilege?.find(
+      (p) => p?.value === privilege
+    )?.label.toLowerCase()
+  },[privilege, selectOptions]);
+
+  const showPartner = privilegeLabel === 'audit' || privilegeLabel === 'manager';
+  const showManager = privilegeLabel === 'audit';
 
   const handleOnChange = ({ name, value, obj }) => {
     if (name === "signature") {
       setIsSignature(obj?.img ?? null);
     }
+
+    console.log(name, value, obj, "test");
+
+    if(name === "privilege"){
+
+      setValue("manager", null);
+      setValue("partner", null);
+
+      const privilegeLabel = obj?.label?.toLowerCase();
+
+      if(privilegeLabel === 'audit'){
+        const managerId = getPrivilegeId('manager');
+        const partnerId = getPrivilegeId('partner');        
+
+        GET_OPTIONS(setSelectOptions, {user: true}, "partner", {
+          privilege: partnerId
+        });
+
+        GET_OPTIONS(setSelectOptions, {user: true}, "manager", {
+          privilege: managerId
+        });
+
+      }
+
+      if(privilegeLabel === 'manager'){
+        const partnerId = getPrivilegeId('partner');
+
+        GET_OPTIONS(setSelectOptions, {user: true}, "partner", {
+          privilege: partnerId
+        });
+
+      }
+
+      
+    }    
+    
 
     if (name === "image") {
       setImage(null);
@@ -178,10 +252,7 @@ const AddUser = ({ data, setRefresh, setData }) => {
       GET_OPTIONS(setSelectOptions, { "main-branch": true }, "branch", {
         company: value,
       });
-    }
-
-    console.log(name);
-    
+    }    
 
     if (name === "type") {
       setValue("franchise", null);
@@ -212,10 +283,6 @@ const AddUser = ({ data, setRefresh, setData }) => {
         );
       }
     }
-
-    // if(name === "privilege"){
-
-    // }
 
     if (name === "branch") {
       setValue("franchise", null);
@@ -293,6 +360,7 @@ const AddUser = ({ data, setRefresh, setData }) => {
     setImage(null);
     setIsSignature(null);
   };
+  
 
   let inputs = useMemo(
     () => [
@@ -343,13 +411,13 @@ const AddUser = ({ data, setRefresh, setData }) => {
         src: image,
         reset: inputReset,
       },
-      {
-        label: "Signature",
-        name: "signature",
-        type: "select",
-        isClearable: true,
-        options: selectOptions?.signature ?? [],
-      },
+      // {
+      //   label: "Signature",
+      //   name: "signature",
+      //   type: "select",
+      //   isClearable: true,
+      //   options: selectOptions?.signature ?? [],
+      // },
       {
         label: "Privilege",
         name: "privilege",
@@ -362,14 +430,16 @@ const AddUser = ({ data, setRefresh, setData }) => {
         name: "partner",
         type: "select",
         required: false,
-        options: selectOptions?.company ?? [],
+        options: selectOptions?.partner ?? [],
+        hide: !showPartner
       },
       {
         label: "Manager",
-        name: "manager",
+        name: "manager", 
         type: "select",
         required: false,
-        options: selectOptions?.company ?? [],
+        options: selectOptions?.manager ?? [],
+        hide: !showManager
       },
       {
         label: "Module",
@@ -378,83 +448,83 @@ const AddUser = ({ data, setRefresh, setData }) => {
         required: true,
         options: selectOptions?.module ?? [],
       },
-      {
-        label: "Department",
-        name: "department",
-        type: "select",
-        required: true,
-        options: selectOptions?.department ?? [],
-      },
-      {
-        label: "Company",
-        name: "company",
-        type: "select",
-        required: true,
-        options: selectOptions?.company ?? [],
-      },
-      {
-        label: "Type",
-        name: "type",   
-        type: "select",
-        disabled: !company,
-        required: false,
-        options: [
-          { label: "Main branch", value: 1 },
-          { label: "Sub branch", value: 2 },
-          { label: "Franchise", value: 3 },
-          { label: "Collection center", value: 4 },
-        ],
-      },
-      {
-        label: "Branch",
-        name: "branch",
-        type: "select",
-        required: true,
-        disabled: !type,
-        options: selectOptions?.branch ?? [],
-        join: [2, 3, 4].includes(type),
-        left: {
-          label: "Branch",
-          name: "branch",
-          type: "select",
-          disabled: !type,
-          required: true,
-          options: selectOptions?.branch ?? [],
-        },
-        right: {
-          ...(type == 2
-            ? {
-                label: "Sub Branch",
-                name: "subBranch",
-                type: "select",
-                required: true,
-                disabled: !type || !branch,
-                options: selectOptions?.subBranch ?? [],
-                hide: type !== 2,
-              }
-            : type === 3
-              ? {
-                  label: "Franchise",
-                  name: "franchise",
-                  type: "select",
-                  disabled: !type || !branch,
-                  required: true,
-                  options: selectOptions?.franchise ?? [],
-                  hide: type !== 3,
-                }
-              : {
-                  label: "Collection Center",
-                  name: "collectionCenter",
-                  type: "select",
-                  disabled: !type || !branch,
-                  required: true,
-                  options: selectOptions?.collectionCenter ?? [],
-                  hide: type !== 4,
-                }),
-        },
-      },
+      // {
+      //   label: "Department",
+      //   name: "department",
+      //   type: "select",
+      //   required: true,
+      //   options: selectOptions?.department ?? [],
+      // },
+      // {
+      //   label: "Company",
+      //   name: "company",
+      //   type: "select",
+      //   required: true,
+      //   options: selectOptions?.company ?? [],
+      // },
+      // {
+      //   label: "Type",
+      //   name: "type",   
+      //   type: "select",
+      //   disabled: !company,
+      //   required: false,
+      //   options: [
+      //     { label: "Main branch", value: 1 },
+      //     { label: "Sub branch", value: 2 },
+      //     { label: "Franchise", value: 3 },
+      //     { label: "Collection center", value: 4 },
+      //   ],
+      // },
+      // {
+      //   label: "Branch",
+      //   name: "branch",
+      //   type: "select",
+      //   required: true,
+      //   disabled: !type,
+      //   options: selectOptions?.branch ?? [],
+      //   join: [2, 3, 4].includes(type),
+      //   left: {
+      //     label: "Branch",
+      //     name: "branch",
+      //     type: "select",
+      //     disabled: !type,
+      //     required: true,
+      //     options: selectOptions?.branch ?? [],
+      //   },
+      //   right: {
+      //     ...(type == 2
+      //       ? {
+      //           label: "Sub Branch",
+      //           name: "subBranch",
+      //           type: "select",
+      //           required: true,
+      //           disabled: !type || !branch,
+      //           options: selectOptions?.subBranch ?? [],
+      //           hide: type !== 2,
+      //         }
+      //       : type === 3
+      //         ? {
+      //             label: "Franchise",
+      //             name: "franchise",
+      //             type: "select",
+      //             disabled: !type || !branch,
+      //             required: true,
+      //             options: selectOptions?.franchise ?? [],
+      //             hide: type !== 3,
+      //           }
+      //         : {
+      //             label: "Collection Center",
+      //             name: "collectionCenter",
+      //             type: "select",
+      //             disabled: !type || !branch,
+      //             required: true,
+      //             options: selectOptions?.collectionCenter ?? [],
+      //             hide: type !== 4,
+      //           }),
+      //   },
+      // },
     ],
-    [type, selectOptions, branch, company, watchId, image, inputReset],
+    [type, selectOptions, branch, company, watchId, image, inputReset, showManager, showPartner],
   );
 
   return (

@@ -214,6 +214,14 @@ const User = () => {
           enableHiding: true,
         },
         {
+          field: "addedBy",
+          label: "Added By",
+
+          type: "badge",
+          enableSorting: true,
+          enableHiding: true,
+        },
+        {
           field: "genderDisplay",
           label: "Gender",
           type: "badge",
