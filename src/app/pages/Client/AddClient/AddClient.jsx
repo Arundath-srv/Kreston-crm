@@ -8,11 +8,11 @@ import { GET_OPTIONS } from "../config";
 import { deepCleanNulls, post, put, valueSetter } from "utility";
 import { toast } from "sonner";
 import { useDidUpdate } from "hooks";
-import moment from "moment";
+// import moment from "moment";
 import Image from "components/Image";
 import { API_URL } from "constants/app.constant";
 
-const AddUser = ({ data, setRefresh, setData }) => {
+const AddClient = ({ data, setRefresh, setData }) => {
   let [selectOptions, setSelectOptions] = useState({});
   let [image, setImage] = useState(null);
   let [isSignature, setIsSignature] = useState(null);
@@ -20,12 +20,10 @@ const AddUser = ({ data, setRefresh, setData }) => {
 
   useEffect(() => {
     GET_OPTIONS(setSelectOptions, { privilege: true }, "privilege");
-    // GET_OPTIONS(setSelectOptions, { signature: true }, "signature");
-    // GET_OPTIONS(setSelectOptions, { company: true }, "company");
+    GET_OPTIONS(setSelectOptions, { manager: true }, "manager");
+    GET_OPTIONS(setSelectOptions, { partner: true }, "partner");
     GET_OPTIONS(setSelectOptions, { module: true }, "module");
     // GET_OPTIONS(setSelectOptions, { department: true }, "department");
-    GET_OPTIONS(setSelectOptions, { partner: true }, "partner");
-    GET_OPTIONS(setSelectOptions, { manager: true }, "manager");
   }, []);
 
   const {
@@ -92,6 +90,29 @@ const AddUser = ({ data, setRefresh, setData }) => {
         );
       }
 
+      // if(data.manager ){
+      //   const managerId = getPrivilegeId('manager');
+      //   const partnerId = getPrivilegeId('partner');        
+
+      //   GET_OPTIONS(setSelectOptions, {user: true}, "partner", {
+      //     privilege: partnerId
+      //   });
+
+      //   GET_OPTIONS(setSelectOptions, {user: true}, "manager", {
+      //     privilege: managerId
+      //   });
+
+      // }
+
+      // if(privilegeLabel === 'manager'){
+      //   const partnerId = getPrivilegeId('partner');
+
+      //   GET_OPTIONS(setSelectOptions, {user: true}, "partner", {
+      //     privilege: partnerId
+      //   });
+
+      // }
+
       let fields = [
         "_id",
         "firstName",
@@ -101,6 +122,8 @@ const AddUser = ({ data, setRefresh, setData }) => {
         "username",
         "dob",
         "gender",
+        "address",
+        "referral",
         {
           field: "privilege",
           path: "privilege.value",
@@ -108,11 +131,11 @@ const AddUser = ({ data, setRefresh, setData }) => {
         },
         {
           field: "partner",
-          path: "partner",
+          path: "partner.value",
           default: null,
         }, {
           field: "manager",
-          path: "manager",
+          path: "manager.value",
           default: null,
         },
         {
@@ -171,11 +194,11 @@ const AddUser = ({ data, setRefresh, setData }) => {
 
   let privilege = watch("privilege") || null;
 
-  // const getPrivilegeId = (label) => {
-  //   return selectOptions?.privilege?.find(
-  //     (p) => p?.label.toLowerCase() === label.toLowerCase()
-  //   )?.value;
-  // }
+  const getPrivilegeId = (label) => {
+    return selectOptions?.privilege?.find(
+      (p) => p?.label.toLowerCase() === label.toLowerCase()
+    )?.value;
+  }
 
   const privilegeLabel = useMemo(() => {
     return selectOptions?.privilege?.find(
@@ -190,6 +213,40 @@ const AddUser = ({ data, setRefresh, setData }) => {
     if (name === "signature") {
       setIsSignature(obj?.img ?? null);
     }
+
+    if (name === "privilege") {
+
+      setValue("manager", null);
+      setValue("partner", null);
+
+      const privilegeLabel = obj?.label?.toLowerCase();
+
+      if (privilegeLabel === 'audit') {
+        const managerId = getPrivilegeId('manager');
+        const partnerId = getPrivilegeId('partner');
+
+        GET_OPTIONS(setSelectOptions, { user: true }, "partner", {
+          privilege: partnerId
+        });
+
+        GET_OPTIONS(setSelectOptions, { user: true }, "manager", {
+          privilege: managerId
+        });
+
+      }
+
+      if (privilegeLabel === 'manager') {
+        const partnerId = getPrivilegeId('partner');
+
+        GET_OPTIONS(setSelectOptions, { user: true }, "partner", {
+          privilege: partnerId
+        });
+
+      }
+
+
+    }
+
 
     if (name === "image") {
       setImage(null);
@@ -281,12 +338,12 @@ const AddUser = ({ data, setRefresh, setData }) => {
       obj = deepCleanNulls(obj);
 
       if (id) {
-        res = await put(`user?other=${id}`, {
+        res = await put(`client?other=${id}`, {
           ...obj,
           imageChanged: image ? false : true,
         });
       } else {
-        res = await post("user", obj);
+        res = await post("client", obj);
       }
 
       if (res.data?._id && file) {
@@ -323,46 +380,47 @@ const AddUser = ({ data, setRefresh, setData }) => {
         required: true,
       },
       { label: "Last Name", name: "lastName", type: "text" },
-      { label: "Mobile", name: "mobile", type: "phone" },
+      { label: "Mobile", name: "mobile", type: "phone", required: true },
       { label: "Email", name: "email", type: "email" },
-      {
-        label: "Username",
-        name: "username",
-        type: "text",
-        required: true,
-      },
-      {
-        label: "Password",
-        name: "password",
-        type: "text",
-        required: true,
-        hide: watchId,
-      },
-      {
-        label: "DOB",
-        name: "dob",
-        type: "date",
-        maxDate: moment().subtract(15, "years").format("DD-MM-YYYY"),
-      },
-      {
-        label: "Gender",
-        name: "gender",
-        type: "select",
-        options: [
-          { label: "Male", value: 1 },
-          { label: "Female", value: 2 },
-          { label: "Non-Binary", value: 3 },
-        ],
-      },
-      {
-        label: "Profile Image",
-        name: "image",
-        type: "file",
-        required: false,
-        accept: ".jpg,.jpeg,.png,image/jpeg,image/png",
-        src: image,
-        reset: inputReset,
-      },
+      { label: "Address", name: "address", type: "text" },
+      // {
+      //   label: "Username",
+      //   name: "username",
+      //   type: "text",
+      //   required: true,
+      // },
+      // {
+      //   label: "Password",
+      //   name: "password",
+      //   type: "text",
+      //   required: true,
+      //   hide: watchId,
+      // },
+      // {
+      //   label: "DOB",
+      //   name: "dob",
+      //   type: "date",
+      //   maxDate: moment().subtract(15, "years").format("DD-MM-YYYY"),
+      // },
+      // {
+      //   label: "Gender",
+      //   name: "gender",
+      //   type: "select",
+      //   options: [
+      //     { label: "Male", value: 1 },
+      //     { label: "Female", value: 2 },
+      //     { label: "Non-Binary", value: 3 },
+      //   ],
+      // },
+      // {
+      //   label: "Profile Image",
+      //   name: "image",
+      //   type: "file",
+      //   required: false,
+      //   accept: ".jpg,.jpeg,.png,image/jpeg,image/png",
+      //   src: image,
+      //   reset: inputReset,
+      // },
       // {
       //   label: "Signature",
       //   name: "signature",
@@ -370,36 +428,36 @@ const AddUser = ({ data, setRefresh, setData }) => {
       //   isClearable: true,
       //   options: selectOptions?.signature ?? [],
       // },
-      {
-        label: "Privilege",
-        name: "privilege",
-        type: "select",
-        required: true,
-        options: selectOptions?.privilege ?? [],
-      },
+      // {
+      //   label: "Privilege",
+      //   name: "privilege",
+      //   type: "select",
+      //   required: true,
+      //   options: selectOptions?.privilege ?? [],
+      // },
       {
         label: "Partner",
         name: "partner",
         type: "select",
-        required: false,
+        required: true,
         options: selectOptions?.partner ?? [],
-        hide: !showPartner
       },
       {
         label: "Manager",
         name: "manager",
         type: "select",
-        required: false,
-        options: selectOptions?.manager ?? [],
-        hide: !showManager
-      },
-      {
-        label: "Module",
-        name: "module",
-        type: "select",
         required: true,
-        options: selectOptions?.module ?? [],
+        options: selectOptions?.manager ?? [],
       },
+      { label: "Referral Name", name: "referral", type: "text" },
+
+      // {
+      //   label: "Module",
+      //   name: "module",
+      //   type: "select",
+      //   required: true,
+      //   options: selectOptions?.module ?? [],
+      // },
       // {
       //   label: "Department",
       //   name: "department",
@@ -553,7 +611,7 @@ const AddUser = ({ data, setRefresh, setData }) => {
             type="submit"
             form="new-analysis-type"
           >
-            {watchId ? "Update" : "Create"}
+            {watchId ? "Update Client" : "Add Client"}
           </Button>
           <Button
             type="reset"
@@ -569,4 +627,4 @@ const AddUser = ({ data, setRefresh, setData }) => {
   );
 };
 
-export default AddUser;
+export default AddClient;

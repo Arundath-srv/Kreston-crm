@@ -4,15 +4,15 @@ import { Page } from "components/shared/Page";
 import { Avatar, Collapse } from "components/ui";
 import { useDidUpdate, useDisclosure } from "hooks";
 import { Minus, Plus, User2 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { del, get, put, queryString, toTop } from "utility";
 import {
   CheckIcon,
   EnvelopeIcon,
-  LockClosedIcon,
+  // LockClosedIcon,
   PencilIcon,
   PhoneIcon,
-  ShieldCheckIcon,
+  // ShieldCheckIcon,
   TrashIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -20,19 +20,19 @@ import TwdTable from "components/TwdTable";
 import { API_URL } from "constants/app.constant";
 import clsx from "clsx";
 import { Switch } from "@headlessui/react";
-import Modal from "components/Modal";
-import SingleChange from "./SingleChange";
-import AddUser from "./AddUser";
-import { GET_OPTIONS } from "../config";
-const User = () => {
+// import Modal from "components/Modal";
+// import SingleChange from "./SingleChange";
+// import { GET_OPTIONS } from "../config";
+import AddClient from "./AddClient";
+const Index = () => {
   const [isExpanded, { toggle, open: collapseOpen }] = useDisclosure();
-  const [isOpen, { open, close }] = useDisclosure();
+  // const [isOpen, {open ,close }] = useDisclosure();
 
   let [update, setUpdate] = useState(null);
-  let [singleChange, setSingleChange] = useState({ id: null, type: null });
+  // let [singleChange, setSingleChange] = useState({ id: null, type: null });
   let [refresh, setRefresh] = useState(0);
 
-  let [privilegeOptions, setPrivilegeOptions] = useState([]);
+  // let [privilegeOptions, setPrivilegeOptions] = useState([]);
 
   let [tableData, setTableData] = useState([]);
   const [filter, setFilter] = useState({});
@@ -40,9 +40,9 @@ const User = () => {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(1);
 
-  useEffect(() => {
-    GET_OPTIONS(setPrivilegeOptions, { privilege: true });
-  }, []);
+  // useEffect(() => {
+  //   GET_OPTIONS(setPrivilegeOptions, { privilege: true });
+  // }, []);
 
   const handlePrivilege = async (
     e,
@@ -70,7 +70,7 @@ const User = () => {
     async (filterProps = filter, pageCount = page, limitCount = limit) => {
       try {
         let { data, count: countRes } = await get(
-          `user/list?page=${pageCount}&limit=${limitCount}&${queryString(filterProps)}`,
+          `client/list?page=${pageCount}&limit=${limitCount}&${queryString(filterProps)}`,
         );
 
         let dataFormatted = data?.map((doc) => {
@@ -146,15 +146,15 @@ const User = () => {
     toTop();
   }, []);
 
-  const handleSingleUpdate = (data) => {
-    setSingleChange(data);
-    open();
-  };
+  // const handleSingleUpdate = (data) => {
+  //   setSingleChange(data);
+  //   open();
+  // };
 
   const handelDelete = useCallback(
     async (id, action) => {
       try {
-        await del(`user?other=${id}`);
+        await del(`client?other=${id}`);
         action?.setConfirmLoading(false);
         action?.setSuccess(true);
         setRefresh(Date.now());
@@ -171,7 +171,7 @@ const User = () => {
     return {
       columns: [
         {
-          field: "dateDisplay",
+          field: "createdAt",
           label: "Date",
           type: "date",
           enableSorting: true,
@@ -184,12 +184,12 @@ const User = () => {
           enableSorting: true,
           enableHiding: false,
         },
-        {
-          field: "username",
-          label: "Username",
-          enableSorting: true,
-          enableHiding: true,
-        },
+        // {
+        //   field: "username",
+        //   label: "Username",
+        //   enableSorting: true,
+        //   enableHiding: true,
+        // },
         {
           field: "mobile",
           label: "Mobile",
@@ -203,11 +203,32 @@ const User = () => {
 
           enableSorting: true,
           enableHiding: true,
-          defaultHiding: true,
         },
         {
-          field: "privilegeDisplay",
-          label: "Privilege",
+          field: "address",
+          label: "Address",
+
+          enableSorting: true,
+          enableHiding: true,
+        },
+        // {
+        //   field: "privilegeDisplay",
+        //   label: "Privilege",
+
+        //   type: "badge",
+        //   enableSorting: true,
+        //   enableHiding: true,
+        // },
+        {
+          field: "manager",
+          label: "Manager",
+
+          type: "badge",
+          enableSorting: true,
+          enableHiding: true,
+        },{
+          field: "partner",
+          label: "Partner",
 
           type: "badge",
           enableSorting: true,
@@ -222,57 +243,49 @@ const User = () => {
           enableHiding: true,
         },
         {
-          field: "manager",
-          label: "Manager",
+          field: "referral",
+          label: "Referral Name ",
 
           type: "badge",
           enableSorting: true,
           enableHiding: true,
         },
-        {
-          field: "partner",
-          label: "Partner",
-
-          type: "badge",
-          enableSorting: true,
-          enableHiding: true,
-        },
-        {
-          field: "genderDisplay",
-          label: "Gender",
-          type: "badge",
-          enableSorting: true,
-          enableHiding: true,
-        },
-        {
-          field: "twoAuth",
-          label: "Two Auth",
-          enableSorting: true,
-          enableHiding: true,
-        },
+        // {
+        //   field: "genderDisplay",
+        //   label: "Gender",
+        //   type: "badge",
+        //   enableSorting: true,
+        //   enableHiding: true,
+        // },
+        // {
+        //   field: "twoAuth",
+        //   label: "Two Auth",
+        //   enableSorting: true,
+        //   enableHiding: true,
+        // },
         {
           label: "actions",
           field: "extra_actions",
           dropdown: false,
           actions: [
-            {
-              label: "Change Privilege",
-              icon: <ShieldCheckIcon className="size-4.5 stroke-1" />,
-              onClick: ({ doc }) => {
-                handleSingleUpdate({
-                  id: doc?._id,
-                  type: 1,
-                  privilege: doc?.privilege,
-                });
-              },
-            },
-            {
-              label: "Change Password",
-              icon: <LockClosedIcon className="size-4.5 stroke-1" />,
-              onClick: ({ doc }) => {
-                handleSingleUpdate({ id: doc?._id, type: 2 });
-              },
-            },
+            // {
+            //   label: "Change Privilege",
+            //   icon: <ShieldCheckIcon className="size-4.5 stroke-1" />,
+            //   onClick: ({ doc }) => {
+            //     handleSingleUpdate({
+            //       id: doc?._id,
+            //       type: 1,
+            //       privilege: doc?.privilege,
+            //     });
+            //   },
+            // },
+            // {
+            //   label: "Change Password",
+            //   icon: <LockClosedIcon className="size-4.5 stroke-1" />,
+            //   onClick: ({ doc }) => {
+            //     handleSingleUpdate({ id: doc?._id, type: 2 });
+            //   },
+            // },
             {
               label: "Edit",
               icon: <PencilIcon className="size-4.5 stroke-1" />,
@@ -309,13 +322,13 @@ const User = () => {
   }, [tableData, handleUpdate, handelDelete]);
 
   return (
-    <Page title="Users">
+    <Page title="Clients">
       <div className="transition-content w-full px-(--margin-x) pt-5 lg:pt-6">
         <Breadcrumb
-          title={"Users"}
+          title={"Clients"}
           options={[
             {
-              label: "Add User",
+              label: "Add Client",
               SwapOn: Minus,
               SwapOff: Plus,
               onClick: toggle,
@@ -324,10 +337,10 @@ const User = () => {
           ]}
         />
         <Collapse in={isExpanded}>  
-          <AddUser data={update} setData={setUpdate} setRefresh={setRefresh} />
+          <AddClient data={update} setData={setUpdate} setRefresh={setRefresh} />
         </Collapse>
 
-        <Modal
+        {/* <Modal
           isOpen={isOpen}
           close={() => {
             close();
@@ -339,7 +352,7 @@ const User = () => {
             setRefresh={setRefresh}
             close={close}
           />
-        </Modal>
+        </Modal> */}
 
         <TwdTable
           data={tableConfig}
@@ -352,17 +365,17 @@ const User = () => {
               name: "search",
             },
           ]}
-          selectable={false}
-          tabs={{
-            filter: "privilege",
-            options: [
-              {
-                label: "All",
-                value: "",
-              },
-              ...privilegeOptions,
-            ],
-          }}
+          // selectable={false}
+          // tabs={{
+          //   filter: "privilege",
+          //   options: [
+          //     {
+          //       label: "All",
+          //       value: "",
+          //     },
+          //     ...privilegeOptions,
+          //   ],
+          // }}
           handleFilterChange={(filterProps, pageCount, limitCount) => {
             fetchTableList(filterProps, pageCount, limitCount);
             setFilter(filterProps);
@@ -433,4 +446,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Index;

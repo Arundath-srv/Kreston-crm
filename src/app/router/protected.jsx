@@ -35,6 +35,19 @@ const protectedRoutes = {
           ]
         },
 
+        {
+          path: '/client',
+          children: [
+            {
+              path: 'add-client',
+              lazy: async () => ({
+                Component: (await import("app/pages/Client/AddClient"))
+                  .default,
+              }),
+            }
+          ]
+        },
+
         //? ===========> Master Settings Module Routes <============
         {
           path: "/master-setting",
