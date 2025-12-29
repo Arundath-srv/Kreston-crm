@@ -15,6 +15,8 @@ import searchRouter from "@/routes/search.router.js";
 //!Common Routes
 import userRouter from "@/routes/user.router.js";
 import optionsRouter from "@/routes/options.router.js";
+import clientRouter from "@/routes/client.routes.js";
+
 
 //? common routes
 router.use("/options", optionsRouter);
@@ -30,5 +32,6 @@ router.use("/privilege", privilegeRoute);
 router.use("/module", moduleRoute);
 router.use("/search", searchRouter);
 router.use(securityRouters);
+router.use("/client", clientRouter);
 
 export default router;

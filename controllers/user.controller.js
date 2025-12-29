@@ -67,15 +67,9 @@ export const basicData = asyncErrorHandler(async (req) => {
 
 //? Both Controllers
 export const deleteUser = asyncErrorHandler(async (req) => {
-  let userId = req.user?._id;
+  let userId = req.user?._id;  
 
-  console.log(userId, "delete test");
-  
-
-  let { other } = req.query;
-
-  console.log(other);
-  
+  let { other } = req.query;  
 
   if (!isNull(other) && !checkObjectIdValid(other)) {
     throw new Error("Invalid user provided", 400);
@@ -92,10 +86,7 @@ export const deleteUser = asyncErrorHandler(async (req) => {
     throw new Error("You are not authorized to perform this action.", 403);
   }
 
-  let updaterId = req.isAdmin ? other : userId;
-
-  console.log(req.isAdmin, updaterId, "test delete user");
-  
+  let updaterId = req.isAdmin ? other : userId;  
 
   let user = await models.User.findByIdAndUpdate(updaterId, { status: 1, updatedBy: userId });
 
@@ -252,9 +243,7 @@ export const addUser = asyncErrorHandler(async (req) => {
 export const updateUser = asyncErrorHandler(async (req) => {
   let userId = req.user?._id;
 
-  let payload = await userSchema(req.body);
-  console.log(payload, "edit test");
-  
+  let payload = await userSchema(req.body);  
 
   if (payload.imageReplace) {
     payload.image = "";
@@ -362,6 +351,8 @@ export const listUser = asyncErrorHandler(async (req) => {
     .populate("company", OPTIONS_FIELD)
     .populate("branch", OPTIONS_FIELD)
     .populate("addedBy", OPTIONS_FIELD)
+    .populate("manager", OPTIONS_FIELD)
+    .populate("partner", OPTIONS_FIELD)
     // .populate("collectionCenter", OPTIONS_FIELD)
     .sort(sortBy)
     .select("-password -createdAt -updatedAt -__v")

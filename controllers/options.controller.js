@@ -95,11 +95,24 @@ export const module = asyncErrorHandler(async (req) => {
 
 export const partner = asyncErrorHandler(async (req) => {
 
-  const privilegeId = '694e357a9dc2560dfb65f6dc';
+  const partner = await models.Privilege.findOne({name: "Partner"});  
 
-  const condition = { status: 0, privilege: privilegeId };
+  const condition = { status: 0, privilege: partner._id };
 
-  let data = await models.User.find(condition).lean();
+  let data = await models.User.find(condition, OPTIONS_FIELD).lean();
 
   return new Response("partner", {data}, 200);
+});
+
+//manager
+
+export const manager = asyncErrorHandler(async (req) => {
+
+  const manager = await models.Privilege.findOne({name: "Manager"});  
+
+  const condition = { status: 0, privilege: manager._id };
+
+  let data = await models.User.find(condition, OPTIONS_FIELD).lean();
+
+  return new Response("manager", {data}, 200);
 });

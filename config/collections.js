@@ -13,6 +13,8 @@ const COLLECTIONS = {
 
   LEADS: "leads",
 
+  CLIENTS: "clients",
+
   //-> Menus and Modules
   MODULES: "modules",
   MAIN_MENUS: "mainMenus",
