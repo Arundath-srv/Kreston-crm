@@ -15,6 +15,8 @@ const COLLECTIONS = {
 
   CLIENTS: "clients",
 
+  PROJECTS: "projects",
+
   //-> Menus and Modules
   MODULES: "modules",
   MAIN_MENUS: "mainMenus",

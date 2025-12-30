@@ -84,8 +84,6 @@ export const updateClient = asyncErrorHandler(async (req) => {
     let editClient = await clientSchema(req.body);    
 
     let { other } = req.query;    
-
-    let condition = [];
     
     if(!isNull(editClient.mobile)){
         condition.push({mobile: editClient.mobile});
@@ -98,7 +96,6 @@ export const updateClient = asyncErrorHandler(async (req) => {
     const existingClient = await models.Client.findOne({
         status: 0,
         _id: {$ne: other ?? userId},
-        $or: condition  
     }).lean();    
 
     if (existingClient) {

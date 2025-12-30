@@ -116,3 +116,14 @@ export const manager = asyncErrorHandler(async (req) => {
 
   return new Response("manager", {data}, 200);
 });
+
+//client
+
+export const client = asyncErrorHandler(async (req) => {
+
+  const condition = { status: 0 };
+
+  let data = await models.Client.find(condition, OPTIONS_FIELD).lean();
+
+  return new Response("client", {data}, 200);
+});
