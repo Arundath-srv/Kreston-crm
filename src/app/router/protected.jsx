@@ -48,6 +48,19 @@ const protectedRoutes = {
           ]
         },
 
+        {
+          path: '/project',
+          children: [
+            {
+              path: 'add-project',
+              lazy: async () => ({
+                Component: (await import("app/pages/Projects/AddProject"))
+                  .default,
+              }),
+            }
+          ]
+        },
+
         //? ===========> Master Settings Module Routes <============
         {
           path: "/master-setting",

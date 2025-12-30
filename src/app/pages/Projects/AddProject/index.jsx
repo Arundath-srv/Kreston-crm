@@ -20,10 +20,10 @@ import TwdTable from "components/TwdTable";
 import { API_URL } from "constants/app.constant";
 import clsx from "clsx";
 import { Switch } from "@headlessui/react";
+import AddProject from "./AddProject";
 // import Modal from "components/Modal";
 // import SingleChange from "./SingleChange";
 // import { GET_OPTIONS } from "../config";
-import AddClient from "./AddClient";
 const Index = () => {
   const [isExpanded, { toggle, open: collapseOpen }] = useDisclosure();
   // const [isOpen, {open ,close }] = useDisclosure();
@@ -66,14 +66,45 @@ const Index = () => {
     [],
   );
 
+  let feeMap = useMemo(
+    () => ({
+      1: { label: "Paid", color: "success"},
+      2: { label: "Unpaid", color: "error"},
+      3: { label: "Partially Paid", color: "warning"},
+    }),
+    [],
+  );
+
+  let projectMap = useMemo(
+    () => ({
+      1: { label: "Completed", color: "success"},
+      2: { label: "In Progress", color: "warning"},
+      3: { label: "On Hold", color: "info"},
+      4: { label: "Not Started", color: "info"},
+      5: { label: "Cancelled", color: "error"},
+    }),
+    [],
+  );
+
+  let projectTypeMap = useMemo(
+    () => ({
+      1: { label: "Audit", color: "neutral"},
+      2: { label: "Tax", color: "neutral"},
+      3: { label: "Valuation", color: "neutral"},
+      4: { label: "ICV", color: "neutral"},
+    }),
+    [],
+  );
+
   const fetchTableList = useCallback(
     async (filterProps = filter, pageCount = page, limitCount = limit) => {
       try {
         let { data, count: countRes } = await get(
-          `client/list?page=${pageCount}&limit=${limitCount}&${queryString(filterProps)}`,
+          `project/list?page=${pageCount}&limit=${limitCount}&${queryString(filterProps)}`,
         );
 
         let dataFormatted = data?.map((doc) => {
+          
           let status = doc?.twoFactor?.enabled ?? false;
           return {
             ...doc,
@@ -83,7 +114,10 @@ const Index = () => {
               name: `${doc?.firstName || ""} ${doc?.lastName || ""}`,
             },
             genderDisplay: genderMap[doc?.gender] || "",
+            feeDisplay: feeMap[doc?.feeStatus] || "",
+            projectDisplay: projectMap[doc?.pStatus] || "",
             privilegeDisplay: doc?.privilege?.label || "",
+            projectTypeDisplay: projectTypeMap[doc?.pType] || "",
             twoAuth: (
               <Switch
                 checked={status}
@@ -154,7 +188,7 @@ const Index = () => {
   const handelDelete = useCallback(
     async (id, action) => {
       try {
-        await del(`client?other=${id}`);
+        await del(`project?other=${id}`);
         action?.setConfirmLoading(false);
         action?.setSuccess(true);
         setRefresh(Date.now());
@@ -178,9 +212,22 @@ const Index = () => {
           enableHiding: false,
         },
         {
-          field: "nameDisplay",
-          label: "Name",
+          field: "client",
+          label: "Client",
           type: "profile",
+          enableSorting: true,
+          enableHiding: false,
+        },
+        {
+          field: "pName",
+          label: "Project",
+          enableSorting: true,
+          enableHiding: false,
+        },
+        {
+          field: "projectTypeDisplay",
+          label: "Type of project",
+          type: "badge",
           enableSorting: true,
           enableHiding: false,
         },
@@ -190,27 +237,27 @@ const Index = () => {
         //   enableSorting: true,
         //   enableHiding: true,
         // },
-        {
-          field: "mobile",
-          label: "Mobile",
+        // {
+        //   field: "mobile",
+        //   label: "Mobile",
 
-          enableSorting: true,
-          enableHiding: true,
-        },
-        {
-          field: "email",
-          label: "Email",
+        //   enableSorting: true,
+        //   enableHiding: true,
+        // },
+        // {
+        //   field: "email",
+        //   label: "Email",
 
-          enableSorting: true,
-          enableHiding: true,
-        },
-        {
-          field: "address",
-          label: "Address",
+        //   enableSorting: true,
+        //   enableHiding: true,
+        // },
+        // {
+        //   field: "address",
+        //   label: "Address",
 
-          enableSorting: true,
-          enableHiding: true,
-        },
+        //   enableSorting: true,
+        //   enableHiding: true,
+        // },
         // {
         //   field: "privilegeDisplay",
         //   label: "Privilege",
@@ -226,7 +273,8 @@ const Index = () => {
           type: "badge",
           enableSorting: true,
           enableHiding: true,
-        },{
+        },
+        {
           field: "partner",
           label: "Partner",
 
@@ -235,21 +283,41 @@ const Index = () => {
           enableHiding: true,
         },
         {
-          field: "addedBy",
-          label: "Added By",
-
+          field: "projectDisplay",
+          label: "Project status",
           type: "badge",
           enableSorting: true,
           enableHiding: true,
         },
+        // {
+        //   field: "feeStatus",
+        //   label: "Fee status",
+        //   enableSorting: true,
+        //   enableHiding: true,
+        // },
         {
-          field: "referral",
-          label: "Referral Name ",
-
+          field: "feeDisplay",
+          label: "Fee Status",
           type: "badge",
           enableSorting: true,
           enableHiding: true,
         },
+        // {
+        //   field: "addedBy",
+        //   label: "Added By",
+
+        //   type: "badge",
+        //   enableSorting: true,
+        //   enableHiding: true,
+        // },
+        // {
+        //   field: "referral",
+        //   label: "Referral Name ",
+
+        //   type: "badge",
+        //   enableSorting: true,
+        //   enableHiding: true,
+        // },
         // {
         //   field: "genderDisplay",
         //   label: "Gender",
@@ -300,17 +368,17 @@ const Index = () => {
               dialog: {
                 pending: {
                   title: "Are you sure?",
-                  description: "Are you sure you want to delete this client?",
+                  description: "Are you sure you want to delete this project?",
                   actionText: "Delete",
                 },
                 success: {
-                  title: "Client deleted",
-                  description: "The client has been successfully deleted.",
+                  title: "Project deleted",
+                  description: "The project has been successfully deleted.",
                 },
                 error: {
-                  title: "Error deleting client",
+                  title: "Error deleting project",
                   description:
-                    "An error occurred while deleting the client. Please try again later.",
+                    "An error occurred while deleting the project . Please try again later.",
                 },
               },
             },
@@ -322,13 +390,13 @@ const Index = () => {
   }, [tableData, handleUpdate, handelDelete]);
 
   return (
-    <Page title="Clients">
+    <Page title="Projects">
       <div className="transition-content w-full px-(--margin-x) pt-5 lg:pt-6">
         <Breadcrumb
-          title={"Clients"}
+          title={"Projects"}
           options={[
             {
-              label: "Add Client",
+              label: "Add Project",
               SwapOn: Minus,
               SwapOff: Plus,
               onClick: toggle,
@@ -337,7 +405,7 @@ const Index = () => {
           ]}
         />
         <Collapse in={isExpanded}>  
-          <AddClient data={update} setData={setUpdate} setRefresh={setRefresh} />
+          <AddProject data={update} setData={setUpdate} setRefresh={setRefresh} />
         </Collapse>
 
         {/* <Modal

@@ -12,14 +12,14 @@ import { useDidUpdate } from "hooks";
 import Image from "components/Image";
 import { API_URL } from "constants/app.constant";
 
-const AddClient = ({ data, setRefresh, setData }) => {
+const AddProject = ({ data, setRefresh, setData }) => {
   let [selectOptions, setSelectOptions] = useState({});
   let [image, setImage] = useState(null);
   let [isSignature, setIsSignature] = useState(null);
-  let [inputReset, setInputReset] = useState(0);
+  let [inputReset, setInputReset] = useState(0);  
 
   useEffect(() => {
-    GET_OPTIONS(setSelectOptions, { privilege: true }, "privilege");
+    GET_OPTIONS(setSelectOptions, { client: true }, "client");
     GET_OPTIONS(setSelectOptions, { manager: true }, "manager");
     GET_OPTIONS(setSelectOptions, { partner: true }, "partner");
     GET_OPTIONS(setSelectOptions, { module: true }, "module");
@@ -115,7 +115,7 @@ const AddClient = ({ data, setRefresh, setData }) => {
 
       let fields = [
         "_id",
-        "firstName",
+        "pName",
         "lastName",
         "mobile",
         "email",
@@ -124,6 +124,9 @@ const AddClient = ({ data, setRefresh, setData }) => {
         "gender",
         "address",
         "referral",
+        "pType",
+        "year",
+        "reviewer",
         {
           field: "privilege",
           path: "privilege.value",
@@ -136,6 +139,21 @@ const AddClient = ({ data, setRefresh, setData }) => {
         }, {
           field: "manager",
           path: "manager.value",
+          default: null,
+        },
+        {
+          field: "pStatus",
+          path: "pStatus",
+          default: null,
+        }, 
+        {
+          field: "feeStatus",
+          path: "feeStatus",
+          default: null,
+        },
+        {
+          field: "client",
+          path: "client",
           default: null,
         },
         {
@@ -338,12 +356,13 @@ const AddClient = ({ data, setRefresh, setData }) => {
       obj = deepCleanNulls(obj);
 
       if (id) {
-        res = await put(`client?other=${id}`, {
+        res = await put(`project?other=${id}`, {
           ...obj,
           imageChanged: image ? false : true,
         });
       } else {
-        res = await post("client", obj);
+        res = await post("project", obj);
+        
       }
 
       if (res.data?._id && file) {
@@ -352,7 +371,7 @@ const AddClient = ({ data, setRefresh, setData }) => {
         await post(`user/image?other=${res.data?._id}`, formData);
       }
 
-      toast.success(res.message ?? "User created successfully");
+      toast.success(res.message ?? "Project created successfully");
 
       setRefresh(Date.now());
       handleReset();
@@ -374,15 +393,77 @@ const AddClient = ({ data, setRefresh, setData }) => {
   let inputs = useMemo(
     () => [
       {
-        label: "First Name",
-        name: "firstName",
+        label: "Client",
+        name: "client",
+        type: "select",
+        required: true,
+        options: selectOptions?.client ?? [],
+
+      },
+      {
+        label: "Project Name",
+        name: "pName",
         type: "text",
         required: true,
       },
-      { label: "Last Name", name: "lastName", type: "text" },
-      { label: "Mobile", name: "mobile", type: "phone", required: true },
-      { label: "Email", name: "email", type: "email" },
-      { label: "Address", name: "address", type: "text" },
+      // {
+      //   label: "Type of project",
+      //   name: "pType",
+      //   type: "text",
+      //   required: true,
+      // },
+      { label: "Type of project", 
+        name: "pType", 
+        type: "select", 
+        required: true,
+        options: [
+          {label: "Audit", value: 1},
+          {label: "Tax", value: 2},
+          {label: "Valuation", value: 3},
+          {label: "ICV", value: 4},
+        ]
+      },
+      { label: "Year/period", name: "year", type: "text" },
+      // { label: "Mobile", name: "mobile", type: "phone", required: true },
+      // { label: "Email", name: "email", type: "email" },
+      {
+        label: "Partner",
+        name: "partner",
+        type: "select",
+        required: true,
+        options: selectOptions?.partner ?? [],
+      },
+      {
+        label: "Manager",
+        name: "manager",
+        type: "select",
+        required: true,
+        options: selectOptions?.manager ?? [],
+      },
+      { label: "Reviewer", name: "reviewer", type: "text" },
+      { label: "Project status", 
+        name: "pStatus", 
+        type: "select", 
+        required: true,
+        options: [
+          {label: "Completed", value: 1},
+          {label: "In Progress", value: 2},
+          {label: "On Hold", value: 3},
+          {label: "Not Started", value: 4},
+          {label: "Cancelled", value: 5}
+        ]
+      },
+      {
+        label: "Fee status",
+        name: "feeStatus", 
+        type: "select",
+        required: true,
+        options: [
+          {label: "Paid", value: 1},
+          {label: "Unpaid", value: 2},
+          {label: "Partially Paid", value: 3}
+        ]
+      },
       // {
       //   label: "Username",
       //   name: "username",
@@ -435,21 +516,7 @@ const AddClient = ({ data, setRefresh, setData }) => {
       //   required: true,
       //   options: selectOptions?.privilege ?? [],
       // },
-      {
-        label: "Partner",
-        name: "partner",
-        type: "select",
-        required: true,
-        options: selectOptions?.partner ?? [],
-      },
-      {
-        label: "Manager",
-        name: "manager",
-        type: "select",
-        required: true,
-        options: selectOptions?.manager ?? [],
-      },
-      { label: "Referral Name", name: "referral", type: "text" },
+
 
       // {
       //   label: "Module",
@@ -611,7 +678,7 @@ const AddClient = ({ data, setRefresh, setData }) => {
             type="submit"
             form="new-analysis-type"
           >
-            {watchId ? "Update Client" : "Add Client"}
+            {watchId ? "Update" : "Create"}
           </Button>
           <Button
             type="reset"
@@ -627,4 +694,4 @@ const AddClient = ({ data, setRefresh, setData }) => {
   );
 };
 
-export default AddClient;
+export default AddProject;
