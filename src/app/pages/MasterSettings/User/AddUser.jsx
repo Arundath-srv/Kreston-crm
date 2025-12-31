@@ -8,7 +8,7 @@ import { GET_OPTIONS } from "../config";
 import { deepCleanNulls, post, put, valueSetter } from "utility";
 import { toast } from "sonner";
 import { useDidUpdate } from "hooks";
-import moment from "moment";
+// import moment from "moment";
 import Image from "components/Image";
 import { API_URL } from "constants/app.constant";
 
@@ -342,7 +342,8 @@ const AddUser = ({ data, setRefresh, setData }) => {
         label: "DOB",
         name: "dob",
         type: "date",
-        maxDate: moment().subtract(15, "years").format("DD-MM-YYYY"),
+        // maxDate: moment().subtract(15, "years").format("DD-MM-YYYY"),
+        
       },
       {
         label: "Gender",
@@ -354,15 +355,15 @@ const AddUser = ({ data, setRefresh, setData }) => {
           { label: "Non-Binary", value: 3 },
         ],
       },
-      {
-        label: "Profile Image",
-        name: "image",
-        type: "file",
-        required: false,
-        accept: ".jpg,.jpeg,.png,image/jpeg,image/png",
-        src: image,
-        reset: inputReset,
-      },
+      // {
+      //   label: "Profile Image",
+      //   name: "image",
+      //   type: "file",
+      //   required: false,
+      //   accept: ".jpg,.jpeg,.png,image/jpeg,image/png",
+      //   src: image,
+      //   reset: inputReset,
+      // },
       // {
       //   label: "Signature",
       //   name: "signature",

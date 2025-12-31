@@ -283,6 +283,14 @@ const Index = () => {
           enableHiding: true,
         },
         {
+          field: "audit",
+          label: "Audit",
+
+          type: "badge",
+          enableSorting: true,
+          enableHiding: true,
+        },
+        {
           field: "projectDisplay",
           label: "Project status",
           type: "badge",

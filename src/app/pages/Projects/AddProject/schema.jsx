@@ -3,11 +3,11 @@ import * as yup from "yup";
 
 export const userSchema = yup
   .object({
-    // firstName: yup
-    //   .string()
-    //   .min(3, "at least 3 characters")
-    //   .max(200, "cannot exceed 200 characters")
-    //   .required("First name is required"),
+    pName: yup
+      .string()
+      .min(3, "at least 3 characters")
+      .max(200, "cannot exceed 200 characters")
+      .required("First name is required"),
     lastName: yup.string().max(200, "cannot exceed 200 characters").nullable(),
     // mobile: yupMobileValidation(yup.string()),
     email: yup.string().email(),
@@ -19,6 +19,11 @@ export const userSchema = yup
     signature: yup.string().matches(ObjectIdRegex, "Invalid signature"),
     manager: yup.string().required("Manager is required"),
     partner: yup.string().required("Partner is required"),
+    audit: yup.string().required("Audit is required"),
+    feeStatus: yup.string().required("Fee Status is required"),
+    pStatus: yup.string().required("Project Status is required"),
+    pType: yup.string().required("Project Type is required"),
+    client: yup.string().required("Client is required"),
     // password: yup
     //   .string()
     //   .min(8, "at least 8 characters long")

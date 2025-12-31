@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { userSchema } from "../../Projects/AddProject/schema";
+import { clientSchema } from "../../Client/addClient/schema";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo, useState } from "react";
 import Inputs from "components/Inputs";
@@ -22,6 +22,7 @@ const AddClient = ({ data, setRefresh, setData }) => {
     GET_OPTIONS(setSelectOptions, { privilege: true }, "privilege");
     GET_OPTIONS(setSelectOptions, { manager: true }, "manager");
     GET_OPTIONS(setSelectOptions, { partner: true }, "partner");
+    GET_OPTIONS(setSelectOptions, { audit: true }, "audit");
     GET_OPTIONS(setSelectOptions, { module: true }, "module");
     // GET_OPTIONS(setSelectOptions, { department: true }, "department");
   }, []);
@@ -34,7 +35,7 @@ const AddClient = ({ data, setRefresh, setData }) => {
     watch,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(userSchema),
+    resolver: yupResolver(clientSchema),
     defaultValues: {
       firstName: "",
     },
@@ -133,9 +134,15 @@ const AddClient = ({ data, setRefresh, setData }) => {
           field: "partner",
           path: "partner.value",
           default: null,
-        }, {
+        }, 
+        {
           field: "manager",
           path: "manager.value",
+          default: null,
+        },
+        {
+          field: "audit",
+          path: "audit.value",
           default: null,
         },
         {
@@ -448,6 +455,13 @@ const AddClient = ({ data, setRefresh, setData }) => {
         type: "select",
         required: true,
         options: selectOptions?.manager ?? [],
+      },
+      {
+        label: "Audit",
+        name: "audit",
+        type: "select",
+        required: true,
+        options: selectOptions?.audit ?? [],
       },
       { label: "Referral Name", name: "referral", type: "text" },
 

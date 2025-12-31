@@ -1,7 +1,7 @@
 import { dateRegex, ObjectIdRegex, yupMobileValidation } from "utility";
 import * as yup from "yup";
 
-export const userSchema = yup
+export const clientSchema = yup
   .object({
     firstName: yup
       .string()
@@ -19,6 +19,7 @@ export const userSchema = yup
     signature: yup.string().matches(ObjectIdRegex, "Invalid signature"),
     manager: yup.string().required("Manager is required"),
     partner: yup.string().required("Partner is required"),
+    audit: yup.string().required("Audit is required"),
     // password: yup
     //   .string()
     //   .min(8, "at least 8 characters long")

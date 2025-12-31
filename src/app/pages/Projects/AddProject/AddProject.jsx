@@ -16,12 +16,15 @@ const AddProject = ({ data, setRefresh, setData }) => {
   let [selectOptions, setSelectOptions] = useState({});
   let [image, setImage] = useState(null);
   let [isSignature, setIsSignature] = useState(null);
-  let [inputReset, setInputReset] = useState(0);  
+  let [inputReset, setInputReset] = useState(0);
+  // let [clientData, setClientData] = useState(null);
 
   useEffect(() => {
     GET_OPTIONS(setSelectOptions, { client: true }, "client");
     GET_OPTIONS(setSelectOptions, { manager: true }, "manager");
     GET_OPTIONS(setSelectOptions, { partner: true }, "partner");
+    GET_OPTIONS(setSelectOptions, { audit: true }, "audit");
+
     GET_OPTIONS(setSelectOptions, { module: true }, "module");
     // GET_OPTIONS(setSelectOptions, { department: true }, "department");
   }, []);
@@ -136,16 +139,22 @@ const AddProject = ({ data, setRefresh, setData }) => {
           field: "partner",
           path: "partner.value",
           default: null,
-        }, {
+        },
+        {
           field: "manager",
           path: "manager.value",
+          default: null,
+        },
+        {
+          field: "audit",
+          path: "audit.value",
           default: null,
         },
         {
           field: "pStatus",
           path: "pStatus",
           default: null,
-        }, 
+        },
         {
           field: "feeStatus",
           path: "feeStatus",
@@ -153,7 +162,7 @@ const AddProject = ({ data, setRefresh, setData }) => {
         },
         {
           field: "client",
-          path: "client",
+          path: "client.value",
           default: null,
         },
         {
@@ -209,6 +218,7 @@ const AddProject = ({ data, setRefresh, setData }) => {
   let company = watch("company") || null;
   let type = watch("type") || null;
   let branch = watch("branch") || null;
+  // let client = watch("client") || null;
 
   let privilege = watch("privilege") || null;
 
@@ -262,6 +272,15 @@ const AddProject = ({ data, setRefresh, setData }) => {
 
       }
 
+
+    }
+
+    if (name === "client") {
+      let client = selectOptions?.client?.find(c => c.value === value);
+
+      setValue("manager", client.manager);
+      setValue("partner", client.partner);
+      setValue("audit", client.audit);
 
     }
 
@@ -362,7 +381,7 @@ const AddProject = ({ data, setRefresh, setData }) => {
         });
       } else {
         res = await post("project", obj);
-        
+
       }
 
       if (res.data?._id && file) {
@@ -412,18 +431,32 @@ const AddProject = ({ data, setRefresh, setData }) => {
       //   type: "text",
       //   required: true,
       // },
-      { label: "Type of project", 
-        name: "pType", 
-        type: "select", 
+      {
+        label: "Type of project",
+        name: "pType",
+        type: "select",
         required: true,
         options: [
-          {label: "Audit", value: 1},
-          {label: "Tax", value: 2},
-          {label: "Valuation", value: 3},
-          {label: "ICV", value: 4},
+          { label: "Audit", value: 1 },
+          { label: "Tax", value: 2 },
+          { label: "Valuation", value: 3 },
+          { label: "ICV", value: 4 },
         ]
       },
-      { label: "Year/period", name: "year", type: "text" },
+      { label: "Year/period", 
+        name: "year", 
+        type: "select", 
+        required: true, 
+        options: Array.from({ length: 50 }, (_, i) => {
+          const startYear = new Date().getFullYear() - 5 + i;
+          const endYear = startYear + 1;
+
+          return {
+            label: `${startYear} - ${endYear}`,
+            value: `${startYear} - ${endYear}`,
+          }
+        })
+      },
       // { label: "Mobile", name: "mobile", type: "phone", required: true },
       // { label: "Email", name: "email", type: "email" },
       {
@@ -440,28 +473,36 @@ const AddProject = ({ data, setRefresh, setData }) => {
         required: true,
         options: selectOptions?.manager ?? [],
       },
+      {
+        label: "Audit",
+        name: "audit",
+        type: "select",
+        required: true,
+        options: selectOptions?.audit ?? [],
+      },
       { label: "Reviewer", name: "reviewer", type: "text" },
-      { label: "Project status", 
-        name: "pStatus", 
-        type: "select", 
+      {
+        label: "Project status",
+        name: "pStatus",
+        type: "select",
         required: true,
         options: [
-          {label: "Completed", value: 1},
-          {label: "In Progress", value: 2},
-          {label: "On Hold", value: 3},
-          {label: "Not Started", value: 4},
-          {label: "Cancelled", value: 5}
+          { label: "Completed", value: 1 },
+          { label: "In Progress", value: 2 },
+          { label: "On Hold", value: 3 },
+          { label: "Not Started", value: 4 },
+          { label: "Cancelled", value: 5 }
         ]
       },
       {
         label: "Fee status",
-        name: "feeStatus", 
+        name: "feeStatus",
         type: "select",
         required: true,
         options: [
-          {label: "Paid", value: 1},
-          {label: "Unpaid", value: 2},
-          {label: "Partially Paid", value: 3}
+          { label: "Paid", value: 1 },
+          { label: "Unpaid", value: 2 },
+          { label: "Partially Paid", value: 3 }
         ]
       },
       // {

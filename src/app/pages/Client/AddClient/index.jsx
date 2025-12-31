@@ -235,6 +235,14 @@ const Index = () => {
           enableHiding: true,
         },
         {
+          field: "audit",
+          label: "Audit",
+
+          type: "badge",
+          enableSorting: true,
+          enableHiding: true,
+        },
+        {
           field: "addedBy",
           label: "Added By",
 
