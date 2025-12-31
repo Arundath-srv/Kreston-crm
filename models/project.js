@@ -7,6 +7,8 @@ const schema = new Schema(
         client: { type: Schema.Types.ObjectId, ref: COLLECTIONS.CLIENTS },
         pType: { type: Number, enum:[1,2,3,4], description: "1 - Audit, 2 - Tax, 3 - Valuation, 4 - ICV"},
         year: { type: String },
+        startDate: { type: String },
+        endDate: { type: String },
         partner: { type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS },
         manager: { type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS },
         audit: {type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS},
