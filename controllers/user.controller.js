@@ -177,10 +177,7 @@ export const setupMFA = asyncErrorHandler(async (req) => {
 
 //? Master Controllers
 export const addUser = asyncErrorHandler(async (req) => {
-  let payload = await userSchema(req.body);
-
-  console.log(req.body, "user add test");
-  
+  let payload = await userSchema(req.body);  
 
   let isValidModule = await models.Modules.findOne({
     _id: payload.module,

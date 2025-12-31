@@ -65,7 +65,7 @@ export const listClient = asyncErrorHandler(async (req) => {
     .skip(skip).limit(limit).sort(sortBy).lean();    
 
     return new Response("Client list", {count, data}, 200)
-});
+}); 
 
 export const deleteClient = asyncErrorHandler(async (req) => {
     let userId = req.user?._id;

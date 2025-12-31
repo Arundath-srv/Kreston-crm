@@ -26,6 +26,8 @@ export const addProject = asyncErrorHandler(async (req) => {
 export const listProject = asyncErrorHandler(async (req) => {
     let { limit, skip, sortBy } = paginationValues(req.query);    
 
+    console.log(req.query, "project test");
+
     let { search } = req.query;
 
     let condition = {status: { $ne: 1 }};
@@ -67,9 +69,6 @@ export const updateProject = asyncErrorHandler(async (req) => {
     let userId = req.user?._id;
 
     let editProject = req.body;
-
-        console.log(editProject, "testtttttttt");
-
 
     let { other } = req.query;
 
