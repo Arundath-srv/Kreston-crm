@@ -7,7 +7,7 @@ export const userSchema = yup
       .string()
       .min(3, "at least 3 characters")
       .max(200, "cannot exceed 200 characters")
-      .required("First name is required"),
+      .required("Project name is required"),
     lastName: yup.string().max(200, "cannot exceed 200 characters").nullable(),
     // mobile: yupMobileValidation(yup.string()),
     email: yup.string().email(),

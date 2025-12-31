@@ -443,19 +443,30 @@ const AddProject = ({ data, setRefresh, setData }) => {
           { label: "ICV", value: 4 },
         ]
       },
-      { label: "Year/period", 
-        name: "year", 
-        type: "select", 
-        required: true, 
-        options: Array.from({ length: 50 }, (_, i) => {
-          const startYear = new Date().getFullYear() - 5 + i;
-          const endYear = startYear + 1;
+      // { label: "Year/period", 
+      //   name: "year", 
+      //   type: "select", 
+      //   required: true, 
+      //   options: Array.from({ length: 50 }, (_, i) => {
+      //     const startYear = new Date().getFullYear() - 5 + i;
+      //     const endYear = startYear + 1;
 
-          return {
-            label: `${startYear} - ${endYear}`,
-            value: `${startYear} - ${endYear}`,
-          }
-        })
+      //     return {
+      //       label: `${startYear} - ${endYear}`,
+      //       value: `${startYear} - ${endYear}`,
+      //     }
+      //   })
+      // },
+      { label: "Reviewer", name: "reviewer", type: "text" },
+      {
+        label: "Start date",
+        name: "startDate",
+        type: "date",
+      },
+      {
+        label: "End date",
+        name: "endDate",
+        type: "date",
       },
       // { label: "Mobile", name: "mobile", type: "phone", required: true },
       // { label: "Email", name: "email", type: "email" },
@@ -480,7 +491,6 @@ const AddProject = ({ data, setRefresh, setData }) => {
         required: true,
         options: selectOptions?.audit ?? [],
       },
-      { label: "Reviewer", name: "reviewer", type: "text" },
       {
         label: "Project status",
         name: "pStatus",

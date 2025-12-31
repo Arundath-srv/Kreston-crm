@@ -23,6 +23,11 @@ const protectedRoutes = {
         },
 
         {
+          index: true,
+          element: <Navigate to="/client/add-client" />,
+        },
+
+        {
           path: '/lead',
           children: [
             {
@@ -38,6 +43,7 @@ const protectedRoutes = {
         {
           path: '/client',
           children: [
+
             {
               path: 'add-client',
               lazy: async () => ({
@@ -79,7 +85,7 @@ const protectedRoutes = {
               lazy: async () => ({
                 Component: (await import("app/pages/MasterSettings/Test"))
                   .default,
-              }),    
+              }),
             },
 
             // ===========> Security Menus <============
