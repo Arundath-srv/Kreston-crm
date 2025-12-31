@@ -1,7 +1,7 @@
 import { dateRegex, ObjectIdRegex } from "utility";
 import * as yup from "yup";
 
-export const userSchema = yup
+export const projectSchema = yup
   .object({
     pName: yup
       .string()

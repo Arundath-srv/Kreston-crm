@@ -220,6 +220,7 @@ const User = () => {
           type: "badge",
           enableSorting: true,
           enableHiding: true,
+          defaultHiding: true
         },
         {
           field: "manager",

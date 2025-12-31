@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { userSchema } from "../../Projects/AddProject/schema";
+import { projectSchema } from "../../Projects/AddProject/schema";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo, useState } from "react";
 import Inputs from "components/Inputs";
@@ -37,7 +37,7 @@ const AddProject = ({ data, setRefresh, setData }) => {
     watch,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(userSchema),
+    resolver: yupResolver(projectSchema),
     defaultValues: {
       firstName: "",
     },

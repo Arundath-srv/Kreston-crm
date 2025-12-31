@@ -17,10 +17,10 @@ const protectedRoutes = {
     {
       Component: DynamicLayout,
       children: [
-        {
-          index: true,
-          element: <Navigate to="/master-setting/user" />,
-        },
+        // {
+        //   index: true,
+        //   element: <Navigate to="/master-setting/user" />,
+        // },
 
         {
           index: true,
