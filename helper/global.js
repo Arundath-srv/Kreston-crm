@@ -34,3 +34,11 @@ global.OPTIONS_FIELD = Object.freeze({
   value: "$_id",
   name: global.CONCAT_NAME_2,
 });
+
+global.OPTIONS_FIELD_ROLE = Object.freeze({
+  ...global.OPTIONS_FIELD,
+
+  manager: 1,
+  audit: 1,
+  partner: 1
+})

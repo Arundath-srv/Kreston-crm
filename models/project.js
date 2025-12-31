@@ -9,6 +9,8 @@ const schema = new Schema(
         year: { type: String },
         partner: { type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS },
         manager: { type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS },
+        audit: {type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS},
+
         reviewer: { type: String },
         pStatus: { type: Number, enum: [1,2,3,4,5], description: "1 - Completed, 2 - In Progress, 3 - On Hold, 4 - Not Started, 5 - Cancelled" },
         feeStatus: { type: Number, enum: [1,2,3], description: "1 - Paid, 2 - Unpaid, 3 - Partially Paid" },

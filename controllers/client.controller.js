@@ -61,6 +61,7 @@ export const listClient = asyncErrorHandler(async (req) => {
     .populate("addedBy", OPTIONS_FIELD)
     .populate("manager", OPTIONS_FIELD)
     .populate("partner", OPTIONS_FIELD)
+    .populate("audit", OPTIONS_FIELD)
     .skip(skip).limit(limit).sort(sortBy).lean();    
 
     return new Response("Client list", {count, data}, 200)
@@ -81,7 +82,9 @@ export const deleteClient = asyncErrorHandler(async (req) => {
 export const updateClient = asyncErrorHandler(async (req) => {
     let userId = req.user?._id;
 
-    let editClient = await clientSchema(req.body);    
+    let editClient = await clientSchema(req.body);   
+    
+    let condition = [];
 
     let { other } = req.query;    
     
@@ -96,6 +99,7 @@ export const updateClient = asyncErrorHandler(async (req) => {
     const existingClient = await models.Client.findOne({
         status: 0,
         _id: {$ne: other ?? userId},
+        $or: condition
     }).lean();    
 
     if (existingClient) {

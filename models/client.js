@@ -15,6 +15,7 @@ const schema = new Schema(
 
         manager: {type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS},
         partner: {type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS},
+        audit: {type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS},
 
         addedBy: {type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS},
         updatedBy: {type: Schema.Types.ObjectId, ref: COLLECTIONS.USERS}

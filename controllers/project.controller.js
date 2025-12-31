@@ -42,6 +42,7 @@ export const listProject = asyncErrorHandler(async (req) => {
     .populate('partner', OPTIONS_FIELD)
     .populate('manager', OPTIONS_FIELD)
     .populate('client', OPTIONS_FIELD)
+    .populate('audit', OPTIONS_FIELD)
     .skip(skip).limit(limit).sort(sortBy).lean();
 
     return new Response("Project list", {count, data}, 200);
@@ -66,6 +67,9 @@ export const updateProject = asyncErrorHandler(async (req) => {
     let userId = req.user?._id;
 
     let editProject = req.body;
+
+        console.log(editProject, "testtttttttt");
+
 
     let { other } = req.query;
 

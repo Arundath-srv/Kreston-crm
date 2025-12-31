@@ -123,7 +123,18 @@ export const client = asyncErrorHandler(async (req) => {
 
   const condition = { status: 0 };
 
-  let data = await models.Client.find(condition, OPTIONS_FIELD).lean();
+  let data = await models.Client.find(condition, OPTIONS_FIELD_ROLE).lean();
 
   return new Response("client", {data}, 200);
+});
+
+export const audit = asyncErrorHandler(async (req) => {
+
+  const manager = await models.Privilege.findOne({name: "Audit"});  
+
+  const condition = { status: 0, privilege: manager._id };
+
+  let data = await models.User.find(condition, OPTIONS_FIELD).lean();
+
+  return new Response("manager", {data}, 200);
 });
