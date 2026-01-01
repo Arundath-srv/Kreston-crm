@@ -63,7 +63,7 @@ const SingleChange = ({ data, setRefresh, close }) => {
           options={options?.privilege ?? []}
           error={errors?.privilege?.message}
         />
-      ) : (
+      ) : data.type == 2 ? (
         <Inputs
           control={control}
           placeholder="Enter the password"
@@ -71,6 +71,28 @@ const SingleChange = ({ data, setRefresh, close }) => {
           name="password"
           type="text"
           error={errors?.password?.message}
+        />
+      ) : data.type == 3 ? (
+        <Inputs
+          control={control}
+          placeholder="Select the project status"
+          label="Change Project Status"
+          name="privilege"
+          type="select"
+          inline
+          options={options?.privilege ?? []}
+          error={errors?.privilege?.message}
+        />
+      ): (
+        <Inputs
+          control={control}
+          placeholder="Select the fee status"
+          label="Change Fee Status"
+          name="privilege"
+          type="select"
+          inline
+          options={options?.privilege ?? []}
+          error={errors?.privilege?.message}
         />
       )}
 

@@ -262,7 +262,7 @@ const User = () => {
               onClick: ({ doc }) => {
                 handleSingleUpdate({
                   id: doc?._id,
-                  type: 1,
+                  type: 1 ,
                   privilege: doc?.privilege,
                 });
               },

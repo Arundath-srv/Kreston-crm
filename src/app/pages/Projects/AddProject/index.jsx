@@ -3,7 +3,7 @@ import Breadcrumb from "components/Breadcrumb";
 import { Page } from "components/shared/Page";
 import { Avatar, Collapse } from "components/ui";
 import { useDidUpdate, useDisclosure } from "hooks";
-import { Minus, Plus, User2 } from "lucide-react";
+import { CheckCircle, Minus, Plus, Receipt, User2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { del, get, put, queryString, toTop } from "utility";
 import {
@@ -21,16 +21,40 @@ import { API_URL } from "constants/app.constant";
 import clsx from "clsx";
 import { Switch } from "@headlessui/react";
 import AddProject from "./AddProject";
-// import Modal from "components/Modal";
-// import SingleChange from "./SingleChange";
+import { useAuthContext } from "app/contexts/auth/context";
+import Modal from "components/Modal";
+import SingleChange from "./SingleChange";
 // import { GET_OPTIONS } from "../config";
 const Index = () => {
   const [isExpanded, { toggle, open: collapseOpen }] = useDisclosure();
-  // const [isOpen, {open ,close }] = useDisclosure();
+  const [isOpen, {open ,close }] = useDisclosure();
 
   let [update, setUpdate] = useState(null);
-  // let [singleChange, setSingleChange] = useState({ id: null, type: null });
+  let [singleChange, setSingleChange] = useState({ id: null, type: null });
   let [refresh, setRefresh] = useState(0);
+
+  const { user } = useAuthContext();
+
+  const isAuditStaff = useMemo(() => {
+    const privilegeName = user?.privilege?.name?.toLowerCase();
+    return privilegeName === 'audit'
+  }, [user]);
+
+  const breadOptions = useMemo(() => {
+    if (isAuditStaff) {
+      return [];
+    }
+
+    return [
+      {
+        label: "Add Project",
+        SwapOn: Minus,
+        SwapOff: Plus,
+        onClick: toggle,
+        active: isExpanded,
+      },
+    ]
+  },[isAuditStaff, isExpanded, toggle]);
 
   // let [privilegeOptions, setPrivilegeOptions] = useState([]);
 
@@ -68,30 +92,30 @@ const Index = () => {
 
   let feeMap = useMemo(
     () => ({
-      1: { label: "Paid", color: "success"},
-      2: { label: "Unpaid", color: "error"},
-      3: { label: "Partially Paid", color: "warning"},
+      1: { label: "Paid", color: "success" },
+      2: { label: "Unpaid", color: "error" },
+      3: { label: "Partially Paid", color: "warning" },
     }),
     [],
   );
 
   let projectMap = useMemo(
     () => ({
-      1: { label: "Completed", color: "success"},
-      2: { label: "In Progress", color: "warning"},
-      3: { label: "On Hold", color: "info"},
-      4: { label: "Not Started", color: "info"},
-      5: { label: "Cancelled", color: "error"},
+      1: { label: "Completed", color: "success" },
+      2: { label: "In Progress", color: "warning" },
+      3: { label: "On Hold", color: "info" },
+      4: { label: "Not Started", color: "info" },
+      5: { label: "Cancelled", color: "error" },
     }),
     [],
   );
 
   let projectTypeMap = useMemo(
     () => ({
-      1: { label: "Audit", color: "neutral"},
-      2: { label: "Tax", color: "neutral"},
-      3: { label: "Valuation", color: "neutral"},
-      4: { label: "ICV", color: "neutral"},
+      1: { label: "Audit", color: "neutral" },
+      2: { label: "Tax", color: "neutral" },
+      3: { label: "Valuation", color: "neutral" },
+      4: { label: "ICV", color: "neutral" },
     }),
     [],
   );
@@ -104,7 +128,7 @@ const Index = () => {
         );
 
         let dataFormatted = data?.map((doc) => {
-          
+
           let status = doc?.twoFactor?.enabled ?? false;
           return {
             ...doc,
@@ -138,11 +162,10 @@ const Index = () => {
                 <span className="sr-only">Use setting</span>
                 <span
                   aria-hidden="true"
-                  className={`${
-                    status
-                      ? "translate-x-6 bg-white rtl:-translate-x-6"
-                      : "dark:bg-dark-50 translate-x-0 bg-white"
-                  } pointer-events-none flex size-4 transform items-center justify-center rounded-full shadow-lg ring-0 transition duration-200 ease-in-out`}
+                  className={`${status
+                    ? "translate-x-6 bg-white rtl:-translate-x-6"
+                    : "dark:bg-dark-50 translate-x-0 bg-white"
+                    } pointer-events-none flex size-4 transform items-center justify-center rounded-full shadow-lg ring-0 transition duration-200 ease-in-out`}
                 >
                   {status ? (
                     <CheckIcon
@@ -180,10 +203,10 @@ const Index = () => {
     toTop();
   }, []);
 
-  // const handleSingleUpdate = (data) => {
-  //   setSingleChange(data);
-  //   open();
-  // };
+  const handleSingleUpdate = (data) => {
+    setSingleChange(data);
+    open();
+  };
 
   const handelDelete = useCallback(
     async (id, action) => {
@@ -344,24 +367,24 @@ const Index = () => {
           field: "extra_actions",
           dropdown: false,
           actions: [
-            // {
-            //   label: "Change Privilege",
-            //   icon: <ShieldCheckIcon className="size-4.5 stroke-1" />,
-            //   onClick: ({ doc }) => {
-            //     handleSingleUpdate({
-            //       id: doc?._id,
-            //       type: 1,
-            //       privilege: doc?.privilege,
-            //     });
-            //   },
-            // },
-            // {
-            //   label: "Change Password",
-            //   icon: <LockClosedIcon className="size-4.5 stroke-1" />,
-            //   onClick: ({ doc }) => {
-            //     handleSingleUpdate({ id: doc?._id, type: 2 });
-            //   },
-            // },
+            {
+              label: "Change Project Status",
+              icon: <CheckCircle className="size-4.5 stroke-1" />,
+              onClick: ({ doc }) => {
+                handleSingleUpdate({
+                  id: doc?._id,
+                  type: 3,
+                  privilege: doc?.privilege,
+                });
+              },
+            },
+            {
+              label: "Change Fee Status",
+              icon: <Receipt className="size-4.5 stroke-1" />,
+              onClick: ({ doc }) => {
+                handleSingleUpdate({ id: doc?._id, type: 4 });
+              },
+            },
             {
               label: "Edit",
               icon: <PencilIcon className="size-4.5 stroke-1" />,
@@ -402,33 +425,26 @@ const Index = () => {
       <div className="transition-content w-full px-(--margin-x) pt-5 lg:pt-6">
         <Breadcrumb
           title={"Projects"}
-          options={[
-            {
-              label: "Add Project",
-              SwapOn: Minus,
-              SwapOff: Plus,
-              onClick: toggle,
-              active: isExpanded,
-            },
-          ]}
+          options={breadOptions}
         />
-        <Collapse in={isExpanded}>  
+
+        <Collapse in={isExpanded}>
           <AddProject data={update} setData={setUpdate} setRefresh={setRefresh} />
         </Collapse>
 
-        {/* <Modal
+        <Modal
           isOpen={isOpen}
           close={() => {
             close();
           }}
-          title={`Change ${singleChange.type == 1 ? "Privilege" : singleChange.type == 2 ? "Password" : ""} `}
+          title={`Change ${singleChange.type == 3 ? "Project Status" : singleChange.type == 4 ? "Fee Status" : ""} `}
         >
           <SingleChange
             data={singleChange}
             setRefresh={setRefresh}
             close={close}
           />
-        </Modal> */}
+        </Modal>
 
         <TwdTable
           data={tableConfig}

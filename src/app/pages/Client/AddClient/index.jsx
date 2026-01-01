@@ -249,6 +249,7 @@ const Index = () => {
           type: "badge",
           enableSorting: true,
           enableHiding: true,
+          defaultHiding: true
         },
         {
           field: "referral",
