@@ -7,7 +7,7 @@ import auth from "@/middleware/crmAuth.js";
 
 const router = Router();
 
-router.get('/list', controller.listProject);
+router.get('/list', auth({ common: true }), controller.listProject);
 
 router.post('/', controller.addProject);
 

@@ -32,9 +32,23 @@ export const listProject = asyncErrorHandler(async (req) => {
 
     let condition = {status: { $ne: 1 }};
 
-    if(!isNull(search)){
+    if(!req.isAdmin){
+        let userId = req.user?._id;
+
         condition.$or = [
-            { pName: { $regex: search, $options: 'i' } },
+            {manager: userId},
+            {audit: userId},
+            {partner: userId},
+        ]
+    }
+
+    if(!isNull(search)){
+        condition.$and = [
+            {
+                $or:[
+                    { pName: { $regex: search, $options: 'i' } },
+                ]
+            }
         ];
     }
 

@@ -70,6 +70,9 @@ const crmAuth = ({ menu = null, sub_menu = null, master = false, common = false,
       const role = user?.privilege ?? {};
       req.user = user;
       req.privilege = role?._id;
+      
+      // console.log(role);
+      
 
       const isAdmin =
         isSame(user._id, config.SUPER_ADMIN_ID) ||
@@ -95,9 +98,9 @@ const crmAuth = ({ menu = null, sub_menu = null, master = false, common = false,
         selectedBranchUser = user[branchMap[user?.type]];
       }
 
-      if (!isAdmin && !selectedBranchUser) {
-        throw new Error("Access denied. You must be assigned to a branch or have administrator privileges.", 403);
-      }
+      // if (!isAdmin && !selectedBranchUser) {
+      //   throw new Error("Access denied. You must be assigned to a branch or have administrator privileges.", 403);
+      // }
 
       req.userType = user?.type;
 

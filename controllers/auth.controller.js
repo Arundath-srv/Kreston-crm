@@ -26,6 +26,9 @@ const secretGenerate = (name = null) => {
 export const login = asyncErrorHandler(async (req) => {
   let payload = await loginSchema(req.body);
 
+  console.log(req.body);
+  
+
   const userAgent = req.headers["user-agent"];
   const deviceDetector = new DeviceDetector();
   const device = deviceDetector.parse(userAgent);

@@ -44,16 +44,35 @@ export const addClient = asyncErrorHandler(async (req) => {
 export const listClient = asyncErrorHandler(async (req) => {
     let { skip, limit, sortBy } = paginationValues(req.query);
     let { search } = req.query;
-    let condition = { status: { $ne: 1 } };
+
+    let condition = { status: { $ne: 1 } };     
+
+    if(!req.isAdmin){
+        let userId = req.user?._id;
+
+        condition.$or = [
+            {manager: userId},
+            {partner: userId},
+            {audit: userId},
+        ];
+        
+    }
 
     if (!isNull(search)) {
-        condition.$or = [
-            { firstName: { $regex: search, $options: "i" } },
-            { lastName: { $regex: search, $options: "i" } },
-            { mobile: { $regex: search, $options: "i" } },
-            { email: { $regex: search, $options: "i" } },
-        ];
+        condition.$and = [
+            {
+                $or: [
+                    { firstName: { $regex: search, $options: "i" } },
+                    { lastName: { $regex: search, $options: "i" } },
+                    { mobile: { $regex: search, $options: "i" } },
+                    { email: { $regex: search, $options: "i" } },
+                ]
+            }
+        ]   
     }
+
+    console.log(condition, "testtttt");
+    
 
     let count = await models.Client.countDocuments(condition);
 

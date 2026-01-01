@@ -6,12 +6,12 @@ import auth from "@/middleware/crmAuth.js";
 
 import * as controller from "../controllers/client.controller.js";
 
-router.post('/', auth({master: true}), controller.addClient);
+router.post('/', auth({common: true}), controller.addClient);
 
-router.put('/', auth({master: true}), controller.updateClient);
+router.put('/', auth({common: true}), controller.updateClient);
 
-router.delete('/', auth({master: true}), controller.deleteClient);
+router.delete('/', auth({common: true}), controller.deleteClient);
 
-router.get('/list', controller.listClient);
+router.get('/list', auth({common: true}), controller.listClient);
 
 export default router;

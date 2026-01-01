@@ -17,7 +17,6 @@ const schema = new Schema(
     deviceId: {
       type: String,
       trim: true,
-      unique: true,
     },
 
     production: { type: Boolean, default: true },
