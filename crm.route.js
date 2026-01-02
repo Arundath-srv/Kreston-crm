@@ -17,6 +17,7 @@ import userRouter from "@/routes/user.router.js";
 import optionsRouter from "@/routes/options.router.js";
 import clientRouter from "@/routes/client.routes.js";
 import projectRouter from "@/routes/project.router.js";
+import dashboardRouter from "@/routes/dashboard.router.js";
 
 
 //? common routes
@@ -35,5 +36,6 @@ router.use("/search", searchRouter);
 router.use(securityRouters);
 router.use("/client", clientRouter);
 router.use("/project", projectRouter);
+router.use("/dashboard", dashboardRouter);
 
 export default router;
