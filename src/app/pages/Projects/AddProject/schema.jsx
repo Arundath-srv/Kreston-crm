@@ -15,7 +15,8 @@ export const projectSchema = yup
     //   .string()
     //   .max(150, "Must be below 150 characters")
     //   .required("Username is required"),
-    dob: yup.string().matches(dateRegex, "Invalid date format"),
+    startDate: yup.string().matches(dateRegex, "Invalid date format").required("Start date is required"),
+    endDate: yup.string().matches(dateRegex, "Invalid date format").required("End date is required"),
     signature: yup.string().matches(ObjectIdRegex, "Invalid signature"),
     manager: yup.string().required("Manager is required"),
     partner: yup.string().required("Partner is required"),

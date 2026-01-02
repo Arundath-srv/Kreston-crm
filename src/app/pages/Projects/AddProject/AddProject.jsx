@@ -462,11 +462,13 @@ const AddProject = ({ data, setRefresh, setData }) => {
         label: "Start date",
         name: "startDate",
         type: "date",
+        required: true
       },
       {
         label: "End date",
         name: "endDate",
         type: "date",
+        required: true
       },
       // { label: "Mobile", name: "mobile", type: "phone", required: true },
       // { label: "Email", name: "email", type: "email" },
