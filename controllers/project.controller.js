@@ -101,3 +101,30 @@ export const updateProject = asyncErrorHandler(async (req) => {
 
     return new Response("Project updated successfully", null, 200)
 });
+
+export const updateProjectStatus = asyncErrorHandler(async (req) => {
+    let {pStatus, id} = req.body;
+
+    console.log(pStatus, "test", id, "idddddd");
+    
+
+    if(isNull(pStatus) || isNull(id)){
+        throw new Error("Project status & Project ID are required", 400);
+    }
+
+    await models.Project.updateOne({_id: id}, {pStatus});
+
+    return new Response("Project status updated successfully", null, 200);
+});
+
+export const updateFeeStatus = asyncErrorHandler(async (req) => {
+    let {feeStatus, id} = req.body;
+
+    if(isNull(feeStatus) || isNull(id)){
+        throw new Error("Project status & Project ID are required", 400);
+    }
+
+    await models.Project.updateOne({_id: id}, {feeStatus});
+
+    return new Response("Fee status updated successfully", null, 200);
+});

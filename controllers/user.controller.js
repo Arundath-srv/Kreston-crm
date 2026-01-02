@@ -419,7 +419,7 @@ export const changePassword = asyncErrorHandler(async (req) => {
 });
 
 export const updatePrivilege = asyncErrorHandler(async (req) => {
-  let { privilege, id } = req.body;
+  let { privilege, id } = req.body;  
 
   if (isNull(privilege) || isNull(id)) {
     throw new Error("Privilege and User ID are required", 400);
