@@ -111,7 +111,7 @@ export const singleChangeSchema = yup.object().shape({
 
   privilege: yup.string().when("type", {
     is: (type) => type === 1,
-    then: (schema) => schema.required("Privilege is required"),
+    then: (schema) => schema.notRequired("Privilege is required"),
     otherwise: (schema) => schema.notRequired().nullable(),
   }),
 
@@ -124,7 +124,7 @@ export const singleChangeSchema = yup.object().shape({
     .matches(/[!@#$%^&*(),.?":{}|<>]/, "at least one special character")
     .when("type", {
       is: (type) => type === 2,
-      then: (schema) => schema.required("Password is required"),
+      then: (schema) => schema.notRequired("Password is required"),
       otherwise: (schema) => schema.notRequired(),
     }),
 });

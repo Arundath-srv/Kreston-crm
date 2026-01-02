@@ -80,10 +80,13 @@ const index = ({ columns: requirement, serialOffset, selectable }) => {
       col;
 
     if (Array.isArray(actions) && field) {
+
+      const visibleActions = actions.filter(action => !action.hide)
+
       columns.push({
         accessorKey: field,
         header: "actions",
-        cell: (props) => <Actions {...props} col={col} />,
+        cell: (props) => <Actions {...props} col={{...col, actions: visibleActions }} />,
         enableSorting: false,
         enableHiding: false,
         className: col.className || "w-20",

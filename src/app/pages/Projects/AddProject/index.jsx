@@ -3,7 +3,7 @@ import Breadcrumb from "components/Breadcrumb";
 import { Page } from "components/shared/Page";
 import { Avatar, Collapse } from "components/ui";
 import { useDidUpdate, useDisclosure } from "hooks";
-import { CheckCircle, Minus, Plus, Receipt, User2 } from "lucide-react";
+import { CheckCircle, DollarSign, Minus, Plus, User2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { del, get, put, queryString, toTop } from "utility";
 import {
@@ -373,16 +373,16 @@ const Index = () => {
               onClick: ({ doc }) => {
                 handleSingleUpdate({
                   id: doc?._id,
-                  type: 3,
-                  privilege: doc?.privilege,
+                  type: 1,
+                  pStatus: doc?.pStatus,
                 });
               },
             },
             {
               label: "Change Fee Status",
-              icon: <Receipt className="size-4.5 stroke-1" />,
+              icon: <DollarSign className="size-4.5 stroke-1" />,
               onClick: ({ doc }) => {
-                handleSingleUpdate({ id: doc?._id, type: 4 });
+                handleSingleUpdate({ id: doc?._id, type: 2, feeStatus: doc?.feeStatus });
               },
             },
             {
@@ -391,11 +391,13 @@ const Index = () => {
               onClick: ({ doc }) => {
                 handleUpdate(doc);
               },
+              hide: isAuditStaff
             },
             {
               label: "Delete",
               icon: <TrashIcon className="size-4.5 stroke-1" />,
               onClick: ({ id, action }) => handelDelete(id, action),
+              hide: isAuditStaff,
               dialog: {
                 pending: {
                   title: "Are you sure?",
@@ -418,7 +420,7 @@ const Index = () => {
       ],
       rows: tableData,
     };
-  }, [tableData, handleUpdate, handelDelete]);
+  }, [tableData, handleUpdate, handelDelete, isAuditStaff]);
 
   return (
     <Page title="Projects">
@@ -437,7 +439,7 @@ const Index = () => {
           close={() => {
             close();
           }}
-          title={`Change ${singleChange.type == 3 ? "Project Status" : singleChange.type == 4 ? "Fee Status" : ""} `}
+          title={`Change ${singleChange.type == 1 ? "Project Status" : singleChange.type == 2 ? "Fee Status" : ""} `}
         >
           <SingleChange
             data={singleChange}

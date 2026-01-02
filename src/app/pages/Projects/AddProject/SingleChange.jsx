@@ -21,7 +21,8 @@ const SingleChange = ({ data, setRefresh, close }) => {
     defaultValues: {
       type: data.type,
       id: data?.id,
-      privilege: data?.privilege?.value || "",
+      pStatus: data?.pStatus || "",
+      feeStatus: data?.feeStatus || ""
     },
   });
 
@@ -33,9 +34,23 @@ const SingleChange = ({ data, setRefresh, close }) => {
     }
   }, []);
 
+  const projectStatus = [
+    { label: "Completed", value: 1 },
+    { label: "In Progress", value: 2 },
+    { label: "On Hold", value: 3 },
+    { label: "Not Started", value: 4 },
+    { label: "Cancelled", value: 5 },
+  ];
+
+  const feeStatus = [
+    { label: "Paid", value: 1 },
+    { label: "Unpaid", value: 2 },
+    { label: "Partially Paid", value: 3 },
+  ]
+
   let onSubmit = async (data) => {
     try {
-      const url = data.type === 1 ? "user/privilege" : "user/password";
+      const url = data.type === 1 ? "project/project-status" : "project/fee-status";
       let res = await put(url, data);
 
       toast.success(res?.message);
@@ -52,27 +67,7 @@ const SingleChange = ({ data, setRefresh, close }) => {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col overflow-y-auto px-4 py-4 sm:px-5"
     >
-      {data.type == 1 ? (
-        <Inputs
-          control={control}
-          placeholder="Select the privilege"
-          label="Change Privilege"
-          name="privilege"
-          type="select"
-          inline
-          options={options?.privilege ?? []}
-          error={errors?.privilege?.message}
-        />
-      ) : data.type == 2 ? (
-        <Inputs
-          control={control}
-          placeholder="Enter the password"
-          label="Change Password"
-          name="password"
-          type="text"
-          error={errors?.password?.message}
-        />
-      ) : data.type == 3 ? (
+      {/* {data.type == 1 ? (
         <Inputs
           control={control}
           placeholder="Select the project status"
@@ -83,7 +78,7 @@ const SingleChange = ({ data, setRefresh, close }) => {
           options={options?.privilege ?? []}
           error={errors?.privilege?.message}
         />
-      ): (
+      ) : (
         <Inputs
           control={control}
           placeholder="Select the fee status"
@@ -94,7 +89,29 @@ const SingleChange = ({ data, setRefresh, close }) => {
           options={options?.privilege ?? []}
           error={errors?.privilege?.message}
         />
-      )}
+      )} */}
+
+      <Inputs
+        control={control}
+        placeholder={
+          data.type == 1 ? "Select the project status" : "Select the fee status"
+        }
+        label={
+          data.type == 1 ? "Change Project Status" : "Change Fee Status"
+        }
+        name={data.type == 1 ? "pStatus" : "feeStatus"}
+        type="select"
+        inline
+        options={
+          data.type == 1 ? projectStatus : feeStatus
+        }
+        error={
+          data.type == 1
+            ? errors?.pStatus?.message
+            : errors?.feeStatus?.message
+        }
+      />
+
 
       <div className="mt-4 space-x-3 text-end">
         <Button
