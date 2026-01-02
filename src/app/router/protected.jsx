@@ -24,7 +24,7 @@ const protectedRoutes = {
 
         {
           index: true,
-          element: <Navigate to="/client/add-client" />,
+          element: <Navigate to="/project/add-project" />,
         },
 
         {
