@@ -18,6 +18,7 @@ import optionsRouter from "@/routes/options.router.js";
 import clientRouter from "@/routes/client.routes.js";
 import projectRouter from "@/routes/project.router.js";
 import dashboardRouter from "@/routes/dashboard.router.js";
+import projectTypeRouter from "@/routes/projectType.router.js";
 
 
 //? common routes
@@ -37,5 +38,6 @@ router.use(securityRouters);
 router.use("/client", clientRouter);
 router.use("/project", projectRouter);
 router.use("/dashboard", dashboardRouter);
+router.use("/project-type", projectTypeRouter);
 
 export default router;

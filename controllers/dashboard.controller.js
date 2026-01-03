@@ -158,6 +158,7 @@ export const dashBoardSummary = asyncErrorHandler(async(req) => {
         _id: {
           year: { $year: "$createdAt" },
           month: { $month: "$createdAt" },
+          pStatus: "$pStatus"
         },
         count: { $sum: 1 },
       },
@@ -173,11 +174,23 @@ export const dashBoardSummary = asyncErrorHandler(async(req) => {
     const m = moment().subtract(i, "months");
     const found = projectGraph.find((x) => x._id.year === m.year() && x._id.month === m.month() + 1);
 
+    const monthData = projectGraph.filter((x) => x._id.year === m.year() && x._id.month === m.month() + 1);
+
+    const completed = monthData.find(d => d._id.pStatus === 1)?.count || 0;
+    const cancelled = monthData.find(d => d._id.pStatus === 5)?.count || 0;
+    const inProgress = monthData.find(d => d._id.pStatus === 2)?.count || 0;
+
     lastSixMonths.push({
       month: m.format("MMM"),
       count: found ? found.count : 0,
+      completed,
+      cancelled,
+      inProgress
     });
   }
+
+
+
 //   /* -------------------- POJECT STATUS COUNTS -------------------- */
 
   // const leadStatusCounts = await models.Lead.aggregate([
@@ -208,37 +221,12 @@ export const dashBoardSummary = asyncErrorHandler(async(req) => {
   //   },
   // ]);
 
-  const leadStatusSummary = {};
-  leadStatusCounts.forEach((item) => {
-    leadStatusSummary[item._id] = item.count;
-  });
+  // const leadStatusSummary = {};
+  // leadStatusCounts.forEach((item) => {
+  //   leadStatusSummary[item._id] = item.count;
+  // });
+  
 
-//   const responseData = {
-//     leads: {
-//         today: todayLeadCount,
-//         week: weekLeadCount,
-//         month: monthLeadCount,
-//         total: totalLeadCount,
-//         lastSixMonths,
-//         statusSummary: leadStatusSummary,
-//       },
-//   }
-//   if(!isLivable){
-//     responseData.orders = {
-//     today: todayOrderCount,
-//     dispatchToday: todayDispatchCount,
-//     deliveryToday: todayDeliveryCount,
-//   };
-
-//   responseData.sales = {
-//     today: todaySalesTotal,
-//   };
-//   }
-//   return new Response(
-//     null,
-//     responseData,
-//     200
-//   );
 
     const dashboardData = {
         project: {
@@ -249,7 +237,8 @@ export const dashBoardSummary = asyncErrorHandler(async(req) => {
             completedProjectCount,
             wipProjectCount,
             cancelledProjectCount,
-            lastSixMonths
+            lastSixMonths,
+            
         },
         audit:{
             totalAuditCount,

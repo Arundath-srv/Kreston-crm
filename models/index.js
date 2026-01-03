@@ -19,6 +19,7 @@ import Country from "./country.js";
 import State from "./State.js";
 import District from "./districts.js";
 import Project from "./project.js";
+import ProjectType from "./projectType.js";
 
 export default {
   //? Core Models
@@ -36,7 +37,8 @@ export default {
   // Lead,
   Client,
   Project,
-
+  ProjectType,
+  
   //? Common
   Counter,
   Country,

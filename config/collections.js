@@ -17,6 +17,8 @@ const COLLECTIONS = {
 
   PROJECTS: "projects",
 
+  PROJECT_TYPES: "project_types",
+
   //-> Menus and Modules
   MODULES: "modules",
   MAIN_MENUS: "mainMenus",
