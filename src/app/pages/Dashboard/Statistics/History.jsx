@@ -27,12 +27,12 @@ export function History() {
 
   const fetchChartData = async () => {
     try {
-      const res = await get("leads/dashboarddetails");
+      const res = await get("dashboard/summary");
       console.log("Chart API 👉", res);
 
-      if (res?.success && res?.leads?.lastSixMonths) {
-        const months = res.leads.lastSixMonths.map((i) => i.month);
-        const leadCounts = res.leads.lastSixMonths.map((i) => i.count);
+      if (res?.success && res?.project?.lastSixMonths) {
+        const months = res.project.lastSixMonths.map((i) => i.month);
+        const leadCounts = res.project.lastSixMonths.map((i) => i.count);
 
         setCategories(months);
 
@@ -88,7 +88,7 @@ export function History() {
     <Card>
       <div className="flex items-center justify-between px-4 pt-3 sm:px-5">
         <h2 className="text-sm-plus truncate font-medium tracking-wide text-gray-800 dark:text-dark-100">
-          Leads
+          Last 6 Months Projects
         </h2>
         <ActionMenu />
       </div>

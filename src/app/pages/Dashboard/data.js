@@ -50,11 +50,11 @@ export const productsOptions = [
 
 export const followupStatus = [
    { label: "New", value: "New", color: "#f89705ff" },
-  { label: "Measurement", value: "Measurement", color: "#34badbff" },
-  { label: "Proposals", value: "Proposals", color: "#f1c40f" },
-  { label: "Project Confirmation", value: "Project Confirmation", color: "#95a5a6" },
-  { label: "Followup", value: "Followup", color: "#2ecc71" },
-  { label: "Lost", value: "Lost", color: "#020101ff" },
+  { label: "Audit", value: "Measurement", color: "#34badbff" },
+  { label: "ICV", value: "Proposals", color: "#f1c40f" },
+  { label: "Valuation", value: "Project Confirmation", color: "#95a5a6" },
+  { label: "Tax", value: "Followup", color: "#2ecc71" },
+  // { label: "Lost", value: "Lost", color: "#020101ff" },
 ];
 
 export const priority = [

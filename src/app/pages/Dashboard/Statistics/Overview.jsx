@@ -1,14 +1,14 @@
 import {
-  CalendarDaysIcon,
   CalendarIcon,
   ChartBarIcon,
-  UsersIcon,
+  // UsersIcon,
   ArrowUpIcon,
-  CurrencyDollarIcon,
-  PaperAirplaneIcon,
+  // CurrencyDollarIcon,
+  // PaperAirplaneIcon,
+  FolderIcon,
 } from "@heroicons/react/24/outline";
 
-import { ShoppingCartIcon, TruckIcon } from "lucide-react";
+// import { ShoppingCartIcon, TruckIcon } from "lucide-react";
 import { Avatar, Card } from "components/ui";
 import { useEffect, useState } from "react";
 import { get } from "utility";
@@ -40,7 +40,7 @@ export function Overview() {
   }, []);
   const fetchDashboard = async () => {
     try {
-      const res = await get("leads/dashboarddetails");
+      const res = await get("dashboard/summary");
       console.log("Dashboard API response 👉", res);
 
       if (res?.success) {
@@ -65,60 +65,90 @@ export function Overview() {
   const leadStats = [
     {
       label: "Today",
-      value: stats?.leads?.today ?? 0,
+      value: stats?.project?.todayProjectCount ?? 0,
       percentage: "—",
       color: "info",
-      icon: CalendarDaysIcon,
+      icon: FolderIcon,
     },
     {
       label: "This Week",
-      value: stats?.leads?.week ?? 0,
+      value: stats?.project?.weekProjectCount ?? 0,
       percentage: "—",
       color: "warning",
       icon: CalendarIcon,
     },
     {
       label: "This Month",
-      value: stats?.leads?.month ?? 0,
+      value: stats?.project?.monthProjectCount ?? 0,
       percentage: "—",
       color: "success",
       icon: ChartBarIcon,
     },
     {
       label: "Total Projects",
-      value: stats?.leads?.total ?? 0,
+      value: stats?.project?.totalProjectCount ?? 0,
       percentage: "—",
       color: "secondary",
-      icon: UsersIcon,
+      icon: FolderIcon,
     },
-    {
-      label: "Today Orders",
-      value: stats?.orders?.today ?? 0,
-      percentage: "—",
-      color: "info",
-      icon: ShoppingCartIcon,
-    },
-    {
-      label: "Today Sales",
-      value: `₹${(stats?.sales?.today ?? 0).toLocaleString("en-IN")}`,
-      percentage: "—",
-      color: "success",
-      icon: CurrencyDollarIcon,
-    },
-    {
-      label: "Today Delivery",
-      value: stats?.orders?.deliveryToday ?? 0,
-      percentage: "—",
-      color: "warning",
-      icon: TruckIcon,
-    },
-    {
-      label: "Total Clients",
-      value: stats?.orders?.dispatchToday ?? 0,
-      percentage: "—",
-      color: "primary",
-      icon: PaperAirplaneIcon,
-    },
+    // {
+    //   label: "Total Audit Project",
+    //   value: stats?.audit?.totalAuditCount ?? 0,
+    //   percentage: "—",
+    //   color: "info",
+    //   icon: ShoppingCartIcon,
+    // },
+    // {
+    //   label: "WIP Audit Project",
+    //   value: stats?.audit?.wipAuditCount ?? 0,
+    //   percentage: "—",
+    //   color: "success",
+    //   icon: CurrencyDollarIcon,
+    // },
+    // {
+    //   label: "Total Tax Project",
+    //   value: stats?.tax?.totalTaxCount ?? 0,
+    //   percentage: "—",
+    //   color: "warning",
+    //   icon: TruckIcon,
+    // },
+    // {
+    //   label: "WIP Tax Project",
+    //   value: stats?.tax?.wipTaxCount ?? 0,
+    //   percentage: "—",
+    //   color: "primary",
+    //   icon: PaperAirplaneIcon,
+    // },
+
+    // {
+    //   label: "Total ICV Project",
+    //   value: stats?.icv?.totalIcvCount ?? 0,
+    //   percentage: "—",
+    //   color: "warning",
+    //   icon: TruckIcon,
+    // },
+    // {
+    //   label: "WIP ICV Project",
+    //   value: stats?.icv?.wipIcvCount ?? 0,
+    //   percentage: "—",
+    //   color: "primary",
+    //   icon: PaperAirplaneIcon,
+    // },
+
+    // {
+    //   label: "Total Valuation Project",
+    //   value: stats?.val?.totalValCount ?? 0,
+    //   percentage: "—",
+    //   color: "warning",
+    //   icon: TruckIcon,
+    // },
+    // {
+    //   label: "WIP Valuation Project",
+    //   value: stats?.val?.wipValCount ?? 0,
+    //   percentage: "—",
+    //   color: "primary",
+    //   icon: PaperAirplaneIcon,
+    // },
     
   ];
 

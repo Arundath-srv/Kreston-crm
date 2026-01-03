@@ -8,8 +8,8 @@ export function Status() {
   const [statusCounts, setStatusCounts] = useState({});
 
   useEffect(() => {
-    get("leads/dashboarddetails").then((res) => {
-      setStatusCounts(res?.leads?.statusSummary || {});
+    get("dashboard/summary").then((res) => {
+      setStatusCounts(res?.project?.statusSummary || {});
     });
   }, []);
 
@@ -17,7 +17,7 @@ export function Status() {
     <Card className="px-4 pb-4 sm:px-5">
       <div className="flex h-14 items-center justify-between py-3">
         <h2 className="text-sm-plus truncate font-medium tracking-wide text-gray-800">
-          Lead Status
+          Project Status
         </h2>
       </div>
 
