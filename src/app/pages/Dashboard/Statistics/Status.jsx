@@ -9,7 +9,7 @@ export function Status() {
 
   useEffect(() => {
     get("dashboard/summary").then((res) => {
-      setStatusCounts(res?.project?.statusSummary || {});
+      setStatusCounts(res?.project?.projectStatusCounts || {});
     });
   }, []);
 

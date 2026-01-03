@@ -32,15 +32,26 @@ export function History() {
 
       if (res?.success && res?.project?.lastSixMonths) {
         const months = res.project.lastSixMonths.map((i) => i.month);
-        const leadCounts = res.project.lastSixMonths.map((i) => i.count);
+        // const leadCounts = res.project.lastSixMonths.map((i) => i.count);
 
         setCategories(months);
 
-        // Only LEADS graph (like your screenshot)
         setSeries([
+          // {
+          //   name: "Total Projects",
+          //   data: leadCounts,
+          // },
           {
-            name: "New",
-            data: leadCounts,
+            name: "Completed",
+            data: res.project.lastSixMonths.map((i) => i.completed),
+          },
+          {
+            name: "In Progress",
+            data: res.project.lastSixMonths.map((i) => i.inProgress),
+          },
+          {
+            name: "Cancelled",
+            data: res.project.lastSixMonths.map((i) => i.cancelled),
           },
         ]);
       }
@@ -52,7 +63,7 @@ export function History() {
   };
 
   const chartConfig = {
-    colors: ["#FF9800"],
+    colors: ["#22C55E", "#3B82F6", "#EF4444"],
     chart: {
       parentHeightOffset: 0,
       toolbar: { show: false },

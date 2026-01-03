@@ -1,13 +1,13 @@
-import { ObjectIdRegex } from "utility";
+import { dateRegex, ObjectIdRegex } from "utility";
 import * as yup from "yup";
 
 export const projectSchema = yup
   .object({
-    name: yup
+    pName: yup
       .string()
       .min(3, "at least 3 characters")
       .max(200, "cannot exceed 200 characters")
-      .required("Project Type is required"),
+      .required("Project name is required"),
     lastName: yup.string().max(200, "cannot exceed 200 characters").nullable(),
     // mobile: yupMobileValidation(yup.string()),
     email: yup.string().email(),
@@ -15,16 +15,16 @@ export const projectSchema = yup
     //   .string()
     //   .max(150, "Must be below 150 characters")
     //   .required("Username is required"),
-    // startDate: yup.string().matches(dateRegex, "Invalid date format").required("Start date is required"),
-    // endDate: yup.string().matches(dateRegex, "Invalid date format").required("End date is required"),
+    startDate: yup.string().matches(dateRegex, "Invalid date format").required("Start date is required"),
+    endDate: yup.string().matches(dateRegex, "Invalid date format").required("End date is required"),
     signature: yup.string().matches(ObjectIdRegex, "Invalid signature"),
-    // manager: yup.string().required("Manager is required"),
-    // partner: yup.string().required("Partner is required"),
-    // audit: yup.string().required("Audit is required"),
-    // feeStatus: yup.string().required("Fee Status is required"),
-    // pStatus: yup.string().required("Project Status is required"),
-    // pType: yup.string().required("Project Type is required"),
-    // client: yup.string().required("Client is required"),
+    manager: yup.string().required("Manager is required"),
+    partner: yup.string().required("Partner is required"),
+    audit: yup.string().required("Audit is required"),
+    feeStatus: yup.string().required("Fee Status is required"),
+    pStatus: yup.string().required("Project Status is required"),
+    pType: yup.string().required("Project Type is required"),
+    client: yup.string().required("Client is required"),
     // password: yup
     //   .string()
     //   .min(8, "at least 8 characters long")

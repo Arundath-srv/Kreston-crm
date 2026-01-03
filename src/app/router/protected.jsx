@@ -41,6 +41,19 @@ const protectedRoutes = {
         },
 
         {
+          path: '/manage',
+          children: [
+            {
+              path: 'add-type',
+              lazy: async () => ({
+                Component: (await import("app/pages/Manage/AddProjectType"))
+                  .default,
+              }),
+            }
+          ]
+        },
+
+        {
           path: '/lead',
           children: [
             {
