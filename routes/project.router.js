@@ -3,7 +3,15 @@ import { Router } from "express";
 import * as controller from "../controllers/project.controller.js";
 
 import auth from "@/middleware/crmAuth.js";
+// import { fileFilter, multerUpload } from "@/helper/index.js";
 
+// const docUpload = multerUpload({
+//   folder: "profile",
+//   filter: fileFilter([".png", ".jpg", ".jpeg", ".pdf", ".xls", ".xlsx"]),
+//   required: false,
+//   requiredMsg: "Profile image is required",
+//   limits: { fileSize: 2 * 1024 * 1024 },
+// });
 
 const router = Router();
 

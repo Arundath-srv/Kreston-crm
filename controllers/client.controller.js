@@ -136,3 +136,59 @@ export const updateClient = asyncErrorHandler(async (req) => {
 
     return new Response("Client updated successfully", null, 200)
 });
+
+export const singleClient = asyncErrorHandler(async (req) => {
+    const {id} = req.params;
+
+    if(!id){
+        throw new Error("Client id is required", 400)
+    }
+
+    let client = await models.Client.findById(id)
+    .populate("addedBy", OPTIONS_FIELD)
+    .populate("manager", OPTIONS_FIELD)
+    .populate("partner", OPTIONS_FIELD)
+    .populate("audit", OPTIONS_FIELD);
+
+    if(!client){
+        throw new Error("Client not found", 404);
+    }
+    
+    return new Response("Client fetch successfully", {data: client}, 200);
+});
+
+export const getClientDashboardCount = asyncErrorHandler(async (req) => {
+    const {id} = req.params;
+
+    if(!id){
+        throw new Error("Client id is required", 400);
+    }
+
+    let client = await models.Client.findOne({_id: id})
+    .populate("addedBy", OPTIONS_FIELD)
+    .populate("manager", OPTIONS_FIELD)
+    .populate("partner", OPTIONS_FIELD)
+    .populate("audit", OPTIONS_FIELD)
+    .lean();
+
+    if(!client){
+        throw new Error("Client not found", 404);
+    }
+
+    const [projectCount, wipProjectCount, cancelledProjectCount, completedProjectCount] = await Promise.all([
+        models.Project.countDocuments({client: id}),
+        models.Project.countDocuments({client: id, pStatus: 2}),
+        models.Project.countDocuments({client: id, pStatus: 5}),
+        models.Project.countDocuments({client: id, pStatus: 1}),
+    ]);
+
+    client.stats = {
+        totalProjects : projectCount,
+        wipProjectCount,
+        cancelledProjectCount,
+        completedProjectCount
+    }
+
+    return new Response("Client fetch successfully", {data: client}, 200);
+
+});

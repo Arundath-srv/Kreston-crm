@@ -138,3 +138,12 @@ export const audit = asyncErrorHandler(async (req) => {
 
   return new Response("manager", {data}, 200);
 });
+
+export const projectType = asyncErrorHandler(async (req) => {
+
+  const condition = { status: 0 };
+
+  let data = await models.ProjectType.find(condition, OPTIONS_FIELD).lean();
+
+  return new Response("project-type", {data}, 200);
+});

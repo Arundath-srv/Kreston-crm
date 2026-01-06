@@ -14,4 +14,8 @@ router.delete('/', auth({common: true}), controller.deleteClient);
 
 router.get('/list', auth({common: true}), controller.listClient);
 
+router.get('/singleclient/:id', auth({common: true}), controller.singleClient);
+
+router.get('/dashboard/:id', controller.getClientDashboardCount);
+
 export default router;

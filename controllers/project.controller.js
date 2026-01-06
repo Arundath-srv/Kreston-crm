@@ -59,6 +59,7 @@ export const listProject = asyncErrorHandler(async (req) => {
     .populate('manager', OPTIONS_FIELD)
     .populate('client', OPTIONS_FIELD)
     .populate('audit', OPTIONS_FIELD)
+    .populate('pType', OPTIONS_FIELD)
     .skip(skip).limit(limit).sort(sortBy).lean();
 
     return new Response("Project list", {count, data}, 200);

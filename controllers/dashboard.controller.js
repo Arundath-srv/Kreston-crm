@@ -3,7 +3,7 @@ import { asyncErrorHandler, Response } from "express-error-catcher";
 
 export const dashBoardSummary = asyncErrorHandler(async(req) => {
 
-    const today = moment().format("YYYY-MM-DD");
+  const today = moment().format("YYYY-MM-DD");
   const startOfWeek = moment().startOf("week").format("YYYY-MM-DD");
   const endOfWeek = moment().endOf("week").format("YYYY-MM-DD");
   const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
@@ -32,7 +32,7 @@ export const dashBoardSummary = asyncErrorHandler(async(req) => {
 // console.log(normalCondition, "normalCondition")
 //   const {domain, ...orderCondition} = normalCondition;
   const [todayProjectCount, weekProjectCount, monthProjectCount, totalProjectCount, 
-    wipProjectCount, completedProjectCount, cancelledProjectCount, totalAuditCount, wipAuditCount,
+    wipProjectCount, completedProjectCount, cancelledProjectCount, onHoldProjectCount, notStartedProjectCount, totalAuditCount, wipAuditCount,
     totalTaxCount, wipTaxCount,
     totalValCount, wipValCount,
     totalIcvCount, wipIcvCount,
@@ -67,45 +67,53 @@ export const dashBoardSummary = asyncErrorHandler(async(req) => {
     }),
 
     models.Project.countDocuments({
-        pType: 1
+        pStatus: 3
     }),
 
     models.Project.countDocuments({
-        pType: 1,
-        pStatus: 2
+        pStatus: 4
     }),
 
-    models.Project.countDocuments({
-        pType: 2
-    }),
+    // models.Project.countDocuments({
+    //     pType: 1
+    // }),
 
-    models.Project.countDocuments({
-        pType: 2,
-        pStatus: 2
-    }),
+    // models.Project.countDocuments({
+    //     pType: 1,
+    //     pStatus: 2
+    // }),
 
-    models.Project.countDocuments({
-        pType: 3
-    }),
+    // models.Project.countDocuments({
+    //     pType: 2
+    // }),
 
-    models.Project.countDocuments({
-        pType: 3,
-        pStatus: 2
-    }),
+    // models.Project.countDocuments({
+    //     pType: 2,
+    //     pStatus: 2
+    // }),
 
-    models.Project.countDocuments({
-        pType: 4
-    }),
+    // models.Project.countDocuments({
+    //     pType: 3
+    // }),
 
-    models.Project.countDocuments({
-        pType: 4,
-        pStatus: 2
-    }),
+    // models.Project.countDocuments({
+    //     pType: 3,
+    //     pStatus: 2
+    // }),
 
-    models.Project.countDocuments({
-      pType: 4,
-      pStatus: 5
-    })
+    // models.Project.countDocuments({
+    //     pType: 4
+    // }),
+
+    // models.Project.countDocuments({
+    //     pType: 4,
+    //     pStatus: 2
+    // }),
+
+    // models.Project.countDocuments({
+    //   pType: 4,
+    //   pStatus: 5
+    // })
   ]);
 
 //  if(!isLivable){
@@ -238,7 +246,8 @@ export const dashBoardSummary = asyncErrorHandler(async(req) => {
             wipProjectCount,
             cancelledProjectCount,
             lastSixMonths,
-            
+            onHoldProjectCount,
+            notStartedProjectCount
         },
         audit:{
             totalAuditCount,

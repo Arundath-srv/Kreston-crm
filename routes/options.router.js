@@ -8,6 +8,10 @@ router.get("/countries", controller.countries).get("/states", controller.states)
 
 
 //! Core Options
-router.get("/privilege", controller.privilege).get("/module", controller.module).get("/user", controller.user).get("/partner", controller.partner).get("/manager", controller.manager).get("/client", controller.client).get("/audit", controller.audit);
+router.get("/privilege", controller.privilege).get("/module", controller.module).get("/user", controller.user)
+
+router.get("/partner", controller.partner).get("/manager", controller.manager).get("/client", controller.client).get("/audit", controller.audit);
+
+router.get("/project-type", controller.projectType);
 
 export default router;
