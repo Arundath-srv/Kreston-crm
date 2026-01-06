@@ -3,7 +3,7 @@ import Breadcrumb from "components/Breadcrumb";
 import { Page } from "components/shared/Page";
 import { Avatar, Collapse } from "components/ui";
 import { useDidUpdate, useDisclosure } from "hooks";
-import { CheckCircle, DollarSign, Minus, Plus, User2 } from "lucide-react";
+import { Minus, Plus, User2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { del, get, put, queryString, toTop } from "utility";
 import {
@@ -27,11 +27,14 @@ import SingleChange from "./SingleChange";
 // import { GET_OPTIONS } from "../config";
 const Index = () => {
   const [isExpanded, { toggle, open: collapseOpen }] = useDisclosure();
-  const [isOpen, {open ,close }] = useDisclosure();
+  const [isOpen, { close }] = useDisclosure();
 
   let [update, setUpdate] = useState(null);
   let [singleChange, setSingleChange] = useState({ id: null, type: null });
   let [refresh, setRefresh] = useState(0);
+
+  console.log(setSingleChange);
+  
 
   const { user } = useAuthContext();
 
@@ -203,10 +206,10 @@ const Index = () => {
     toTop();
   }, []);
 
-  const handleSingleUpdate = (data) => {
-    setSingleChange(data);
-    open();
-  };
+  // const handleSingleUpdate = (data) => {
+  //   setSingleChange(data);
+  //   open();
+  // };
 
   const handelDelete = useCallback(
     async (id, action) => {
@@ -366,24 +369,24 @@ const Index = () => {
           field: "extra_actions",
           dropdown: false,
           actions: [
-            {
-              label: "Change Project Status",
-              icon: <CheckCircle className="size-4.5 stroke-1" />,
-              onClick: ({ doc }) => {
-                handleSingleUpdate({
-                  id: doc?._id,
-                  type: 1,
-                  pStatus: doc?.pStatus,
-                });
-              },
-            },
-            {
-              label: "Change Fee Status",
-              icon: <DollarSign className="size-4.5 stroke-1" />,
-              onClick: ({ doc }) => {
-                handleSingleUpdate({ id: doc?._id, type: 2, feeStatus: doc?.feeStatus });
-              },
-            },
+            // {
+            //   label: "Change Project Status",
+            //   icon: <CheckCircle className="size-4.5 stroke-1" />,
+            //   onClick: ({ doc }) => {
+            //     handleSingleUpdate({
+            //       id: doc?._id,
+            //       type: 1,
+            //       pStatus: doc?.pStatus,
+            //     });
+            //   },
+            // },
+            // {
+            //   label: "Change Fee Status",
+            //   icon: <DollarSign className="size-4.5 stroke-1" />,
+            //   onClick: ({ doc }) => {
+            //     handleSingleUpdate({ id: doc?._id, type: 2, feeStatus: doc?.feeStatus });
+            //   },
+            // },
             {
               label: "Edit",
               icon: <PencilIcon className="size-4.5 stroke-1" />,

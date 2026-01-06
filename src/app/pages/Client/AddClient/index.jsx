@@ -1,9 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable */
 import Breadcrumb from "components/Breadcrumb";
 import { Page } from "components/shared/Page";
 import { Avatar, Collapse } from "components/ui";
 import { useDidUpdate, useDisclosure } from "hooks";
-import { Minus, Plus, User2 } from "lucide-react";
+import { EyeIcon, Minus, Plus, User2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { del, get, put, queryString, toTop } from "utility";
 import {
@@ -24,8 +24,11 @@ import { Switch } from "@headlessui/react";
 // import SingleChange from "./SingleChange";
 // import { GET_OPTIONS } from "../config";
 import AddClient from "./AddClient";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 const Index = () => {
   const [isExpanded, { toggle, open: collapseOpen }] = useDisclosure();
+  const navigate = useNavigate();
   // const [isOpen, {open ,close }] = useDisclosure();
 
   let [update, setUpdate] = useState(null);
@@ -150,6 +153,11 @@ const Index = () => {
   //   setSingleChange(data);
   //   open();
   // };
+
+  const handleDashboardClick = useCallback((req) => {
+    console.log("DATA : ", req)
+    navigate(`/client/add-client/${encodeURIComponent(req.id)}`);
+  })
 
   const handelDelete = useCallback(
     async (id, action) => {
@@ -295,6 +303,14 @@ const Index = () => {
             //     handleSingleUpdate({ id: doc?._id, type: 2 });
             //   },
             // },
+
+            {
+            label: "View",
+            icon: (
+              <EyeIcon className="size-4.5 stroke-1 cursor-pointer text-gray-600 hover:text-blue-600" />
+            ),
+            onClick: (req) => handleDashboardClick(req)
+          },
             {
               label: "Edit",
               icon: <PencilIcon className="size-4.5 stroke-1" />,

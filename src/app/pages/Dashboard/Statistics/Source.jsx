@@ -1,7 +1,7 @@
 /*eslint-disable*/
 // Local Imports
 import { Card } from "components/ui";
-import { source } from "../../data";
+import { source } from "../data";
 import CountCard from "./CountCard";
 import ReactApexChart from "react-apexcharts";
 import { useState } from "react";
@@ -65,7 +65,7 @@ export function Source() {
           height={350}
         />
       </div>
-      {/* <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-4">
         {source.map((item, key) => (
           <CountCard
             Icon={item.icon}
@@ -75,7 +75,7 @@ export function Source() {
             count={Math.floor(Math.random() * 100)}
           />
         ))}
-      </div> */}
+      </div>
     </Card>
   );
 }

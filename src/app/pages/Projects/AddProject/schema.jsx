@@ -3,7 +3,7 @@ import * as yup from "yup";
 
 export const projectSchema = yup
   .object({
-    name: yup
+    pName: yup
       .string()
       .min(3, "at least 3 characters")
       .max(200, "cannot exceed 200 characters")
@@ -18,12 +18,15 @@ export const projectSchema = yup
     // startDate: yup.string().matches(dateRegex, "Invalid date format").required("Start date is required"),
     // endDate: yup.string().matches(dateRegex, "Invalid date format").required("End date is required"),
     signature: yup.string().matches(ObjectIdRegex, "Invalid signature"),
-    // manager: yup.string().required("Manager is required"),
-    // partner: yup.string().required("Partner is required"),
-    // audit: yup.string().required("Audit is required"),
-    // feeStatus: yup.string().required("Fee Status is required"),
-    // pStatus: yup.string().required("Project Status is required"),
-    // pType: yup.string().required("Project Type is required"),
+    manager: yup.string().required("Manager is required"),
+    partner: yup.string().required("Partner is required"),
+    client: yup.string().required("client is required"),
+    audit: yup.string().required("Audit is required"),
+    feeStatus: yup.string().required("Fee Status is required"),
+    startDate: yup.string().required("Start date is required"),
+    endDate: yup.string().required("End date is required"),
+    pStatus: yup.string().required("Project Status is required"),
+    pType: yup.string().required("Project Type is required"),
     // client: yup.string().required("Client is required"),
     // password: yup
     //   .string()
@@ -60,18 +63,18 @@ export const projectSchema = yup
       .test("fileOrString", "Invalid image input", (value) => {
         return !value || value instanceof File;
       })
-      .test("fileType", "Only PNG and JPEG files are allowed", (value) => {
-        if (value instanceof File) {
-          return ["image/png", "image/jpeg"].includes(value.type);
-        }
-        return true;
-      })
-      .test("fileSize", "File is too large, maximum size is 5MB", (value) => {
-        if (value instanceof File) {
-          return value.size <= 5 * 1024 * 1024;
-        }
-        return true;
-      }),
+      // .test("fileType", "Only PNG and JPEG files are allowed", (value) => {
+      //   if (value instanceof File) {
+      //     return ["image/png", "image/jpeg"].includes(value.type);
+      //   }
+      //   return true;
+      // })
+      // .test("fileSize", "File is too large, maximum size is 5MB", (value) => {
+      //   if (value instanceof File) {
+      //     return value.size <= 5 * 1024 * 1024;
+      //   }
+      //   return true;
+      // }),
   })
   .test(
     "condition-validation",

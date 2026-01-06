@@ -28,69 +28,78 @@ const protectedRoutes = {
         },
 
         {
-          path: '/dashboard',
+          path: "/dashboard",
           children: [
             {
-              path: 'home',
+              path: "home",
               lazy: async () => ({
-                Component: (await import("app/pages/Dashboard"))
-                  .default,
+                Component: (await import("app/pages/Dashboard")).default,
               }),
-            }
-          ]
+            },
+          ],
         },
 
         {
-          path: '/manage',
+          path: "/manage",
           children: [
             {
-              path: 'add-type',
+              path: "add-type",
               lazy: async () => ({
                 Component: (await import("app/pages/Manage/AddProjectType"))
                   .default,
               }),
-            }
-          ]
+            },
+          ],
         },
 
         {
-          path: '/lead',
+          path: "/lead",
           children: [
             {
-              path: 'add-lead',
+              path: "add-lead",
               lazy: async () => ({
-                Component: (await import("app/pages/Lead/Addlead"))
-                  .default,
+                Component: (await import("app/pages/Lead/Addlead")).default,
               }),
-            }
-          ]
+            },
+          ],
         },
 
         {
-          path: '/client',
+          path: "/client",
           children: [
-
             {
-              path: 'add-client',
-              lazy: async () => ({
-                Component: (await import("app/pages/Client/AddClient"))
-                  .default,
-              }),
-            }
-          ]
+              path: "add-client",
+              children: [
+                {
+                  index: true,
+                  lazy: async () => ({
+                    Component: (await import("app/pages/Client/AddClient"))
+                      .default,
+                  }),
+                },
+                {
+                  path: ":id",
+                  lazy: async () => ({
+                    Component: (await import("app/pages/Client/Dashboard"))
+                      .default,
+                  }),
+                },
+              ],
+            },
+          ],
         },
 
         {
-          path: '/project',
+          path: "/project",
           children: [
             {
-              path: 'add-project',
+              path: "add-project",
               lazy: async () => ({
                 Component: (await import("app/pages/Projects/AddProject"))
                   .default,
               }),
-            }
-          ]
+            },
+          ],
         },
 
         //? ===========> Master Settings Module Routes <============

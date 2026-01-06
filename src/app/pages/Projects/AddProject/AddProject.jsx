@@ -24,10 +24,11 @@ const AddProject = ({ data, setRefresh, setData }) => {
     GET_OPTIONS(setSelectOptions, { manager: true }, "manager");
     GET_OPTIONS(setSelectOptions, { partner: true }, "partner");
     GET_OPTIONS(setSelectOptions, { audit: true }, "audit");
+    GET_OPTIONS(setSelectOptions, { "project-type": true }, "pType");
 
     GET_OPTIONS(setSelectOptions, { module: true }, "module");
     // GET_OPTIONS(setSelectOptions, { department: true }, "department");
-  }, []);
+  }, []);  
 
   const {
     handleSubmit,
@@ -127,12 +128,19 @@ const AddProject = ({ data, setRefresh, setData }) => {
         "gender",
         "address",
         "referral",
-        "pType",
+        // "pType",
         "year",
         "reviewer",
+        "startDate",
+        "endDate",
         {
           field: "privilege",
           path: "privilege.value",
+          default: null,
+        },
+        {
+          field: "pType",
+          path: "pType.value",
           default: null,
         },
         {
@@ -381,7 +389,7 @@ const AddProject = ({ data, setRefresh, setData }) => {
         });
       } else {
         res = await post("project", obj);
-
+        
       }
 
       if (res.data?._id && file) {
@@ -436,12 +444,13 @@ const AddProject = ({ data, setRefresh, setData }) => {
         name: "pType",
         type: "select",
         required: true,
-        options: [
-          { label: "Audit", value: 1 },
-          { label: "Tax", value: 2 },
-          { label: "Valuation", value: 3 },
-          { label: "ICV", value: 4 },
-        ]
+        // options: [
+        //   { label: "Audit", value: 1 },
+        //   { label: "Tax", value: 2 },
+        //   { label: "Valuation", value: 3 },
+        //   { label: "ICV", value: 4 },
+        // ]
+        options: selectOptions?.pType ?? []
       },
       // { label: "Year/period", 
       //   name: "year", 
@@ -547,11 +556,11 @@ const AddProject = ({ data, setRefresh, setData }) => {
       //   ],
       // },
       // {
-      //   label: "Profile Image",
+      //   label: "Document",
       //   name: "image",
       //   type: "file",
       //   required: false,
-      //   accept: ".jpg,.jpeg,.png,image/jpeg,image/png",
+      //   accept: ".jpg,.jpeg,.png,.pdf,.xls,.xlsx",
       //   src: image,
       //   reset: inputReset,
       // },

@@ -3,7 +3,7 @@ import Breadcrumb from "components/Breadcrumb";
 import { Page } from "components/shared/Page";
 import { Avatar, Collapse } from "components/ui";
 import { useDidUpdate, useDisclosure } from "hooks";
-import { CheckCircle, DollarSign, Minus, Plus, User2 } from "lucide-react";
+import { CheckCircle, DollarSign, Funnel, Minus, Plus } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { del, get, put, queryString, toTop } from "utility";
 import {
@@ -248,7 +248,7 @@ const Index = () => {
           enableHiding: false,
         },
         {
-          field: "projectTypeDisplay",
+          field: "pType",
           label: "Type of project",
           type: "badge",
           enableSorting: true,
@@ -454,7 +454,7 @@ const Index = () => {
           facedFilter={[
             {
               type: "text",
-              icon: User2,
+              icon: Funnel,
               placeholder: "Search...",
               name: "search",
             },
